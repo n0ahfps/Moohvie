@@ -1,15 +1,6 @@
-# MoohVie Android (en cours de portage)
+# MoohVie Android
 
-Portage natif Kotlin + Jetpack Compose de l'app iOS, suivi par l'issue #5.
-
-## État actuel
-
-- Scaffold Gradle/Compose fonctionnel (namespace `noah.moohvie`, minSdk 26)
-- Modèles de données portés depuis `Moohvie/Models` et `Moohvie/Utils/genrelookup.swift`
-- `TMDBService` (Retrofit) portant `Moohvie/Services/TMDBService.swift`
-- Écrans Accueil et Quiz (Compose) comme preuve de concept de l'architecture MVVM
-
-Le reste des écrans iOS (Swipe, Cinétable, Boutique, Profil, Trophées, Réglages) n'est pas encore porté — voir le commentaire de roadmap sur l'issue #5.
+Portage natif Kotlin + Jetpack Compose de l'app iOS, suivi par l'issue #5. Tous les écrans (Accueil, Quiz, Swipe, Surprends-moi, Cinétable, Boutique, Profil, Trophées, Réglages) sont portés.
 
 ## Configuration
 
@@ -21,4 +12,12 @@ Le reste des écrans iOS (Swipe, Cinétable, Boutique, Profil, Trophées, Régla
 
 ## Build
 
-Ouvre le dossier `android/` dans Android Studio (Kotlin 1.9, AGP 8.5) et lance le module `app`. Android Studio génère automatiquement le Gradle wrapper au premier sync si besoin.
+Ouvre le dossier `android/` dans Android Studio (Kotlin 2.0, AGP 8.5) et lance le module `app`.
+
+En CLI : `./gradlew :app:assembleDebug` génère un `.apk` debug dans `app/build/outputs/apk/debug/`.
+
+**JDK requis : 17** (pas plus récent). AGP utilise `jlink` sur `core-for-system-modules.jar` du SDK Android, qui échoue avec certains JDK 17 alternatifs (ex. GraalVM CE 17 plante avec une erreur `'for' is not a Java identifier`) et avec les JDK 18+. Un OpenJDK 17 standard (`brew install openjdk@17`) fonctionne. Si plusieurs JDK sont installés, force celui à utiliser sans toucher à ta config globale :
+
+```
+./gradlew :app:assembleDebug -Dorg.gradle.java.home=/opt/homebrew/Cellar/openjdk@17/<version>
+```
