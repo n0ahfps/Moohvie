@@ -38,7 +38,8 @@ class CineTableStore: ObservableObject {
             voteAverage: movie.voteAverage,
             watchedDate: Date(),
             genreIDs: movie.genreIDs,
-            pointsEarned: points
+            pointsEarned: points,
+            releaseDate: movie.releaseDate
         )
         watchedMovies.insert(entry, at: 0)
         MoohPointsStore.shared.award(points)
