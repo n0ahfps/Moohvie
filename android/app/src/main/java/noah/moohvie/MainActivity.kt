@@ -1,10 +1,12 @@
 package noah.moohvie
 
 import android.os.Bundle
+import android.os.SystemClock
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -49,53 +51,76 @@ private object Routes {
     fun trophyDetail(trophyId: String) = "trophies/$trophyId"
 }
 
+/**
+ * Back and forward nav buttons often sit at the same screen position across consecutive
+ * screens (e.g. a top-left back arrow lands where the next screen's icon button is). A fast
+ * double tap there fires a second navigate()/popBackStack() while the first is still settling;
+ * Navigation Compose then silently drops it instead of crashing, leaving the UI stuck on a
+ * half-transitioned, blank frame. Debouncing every nav action on a single shared timestamp
+ * closes that window regardless of which screen either tap nominally lands on.
+ */
+private class NavigationDebouncer(private val minIntervalMs: Long = 500L) {
+    private var lastNavTime = 0L
+
+    fun run(action: () -> Unit) {
+        val now = SystemClock.elapsedRealtime()
+        if (now - lastNavTime >= minIntervalMs) {
+            lastNavTime = now
+            action()
+        }
+    }
+}
+
 @androidx.compose.runtime.Composable
 private fun MoohvieNavHost() {
     val navController = rememberNavController()
+    val debouncer = remember { NavigationDebouncer() }
+
+    fun navigate(route: String) = debouncer.run { navController.navigate(route) }
+    fun back() = debouncer.run { navController.popBackStack() }
+
     NavHost(navController = navController, startDestination = Routes.HOME) {
         composable(Routes.HOME) {
             HomeScreen(
-                onStartQuiz = { quizLength ->
-                    navController.navigate(Routes.quiz(quizLength))
-                },
-                onSurpriseMe = { navController.navigate(Routes.SURPRISE) },
-                onOpenCineTable = { navController.navigate(Routes.CINETABLE) },
-                onOpenShop = { navController.navigate(Routes.SHOP) },
-                onOpenProfile = { navController.navigate(Routes.PROFILE) },
-                onOpenTrophies = { navController.navigate(Routes.TROPHIES) },
-                onOpenSettings = { navController.navigate(Routes.SETTINGS) },
+                onStartQuiz = { quizLength -> navigate(Routes.quiz(quizLength)) },
+                onSurpriseMe = { navigate(Routes.SURPRISE) },
+                onOpenCineTable = { navigate(Routes.CINETABLE) },
+                onOpenShop = { navigate(Routes.SHOP) },
+                onOpenProfile = { navigate(Routes.PROFILE) },
+                onOpenTrophies = { navigate(Routes.TROPHIES) },
+                onOpenSettings = { navigate(Routes.SETTINGS) },
             )
         }
         composable(Routes.QUIZ) { backStackEntry ->
             val quizLength = QuizLength.valueOf(
                 backStackEntry.arguments?.getString("quizLength") ?: QuizLength.SHORT.name
             )
-            QuizScreen(quizLength = quizLength, onBack = { navController.popBackStack() })
+            QuizScreen(quizLength = quizLength, onBack = { back() })
         }
         composable(Routes.SURPRISE) {
-            SurpriseScreen(onBack = { navController.popBackStack() })
+            SurpriseScreen(onBack = { back() })
         }
         composable(Routes.CINETABLE) {
-            CineTableScreen(onBack = { navController.popBackStack() })
+            CineTableScreen(onBack = { back() })
         }
         composable(Routes.SHOP) {
-            ShopScreen(onBack = { navController.popBackStack() })
+            ShopScreen(onBack = { back() })
         }
         composable(Routes.PROFILE) {
-            ProfileScreen(onBack = { navController.popBackStack() })
+            ProfileScreen(onBack = { back() })
         }
         composable(Routes.TROPHIES) {
             TrophiesScreen(
-                onBack = { navController.popBackStack() },
-                onOpenTrophy = { trophy -> navController.navigate(Routes.trophyDetail(trophy.id)) },
+                onBack = { back() },
+                onOpenTrophy = { trophy -> navigate(Routes.trophyDetail(trophy.id)) },
             )
         }
         composable(Routes.TROPHY_DETAIL) { backStackEntry ->
             val trophyId = backStackEntry.arguments?.getString("trophyId") ?: return@composable
-            TrophyDetailScreen(trophyId = trophyId, onBack = { navController.popBackStack() })
+            TrophyDetailScreen(trophyId = trophyId, onBack = { back() })
         }
         composable(Routes.SETTINGS) {
-            SettingsScreen(onClose = { navController.popBackStack() })
+            SettingsScreen(onClose = { back() })
         }
     }
 }
