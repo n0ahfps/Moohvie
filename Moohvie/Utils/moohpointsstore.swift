@@ -24,4 +24,11 @@ class MoohPointsStore: ObservableObject {
     func refund(_ points: Int) {
         totalPoints = max(0, totalPoints - points)
     }
+
+    @discardableResult
+    func spend(_ points: Int) -> Bool {
+        guard totalPoints >= points else { return false }
+        totalPoints -= points
+        return true
+    }
 }
