@@ -1,14 +1,11 @@
-//
-//  MoohvieApp.swift
-//  Moohvie
-//
-//  Created by Noah Onofré on 24/06/2026.
-//
-
 import SwiftUI
 
 @main
 struct MoohvieApp: App {
+    init() {
+        print("DEBUG app démarrée")
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
