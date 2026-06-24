@@ -27,7 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import noah.moohvie.models.QuizLength
 import noah.moohvie.ui.theme.MooDark
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
+import noah.moohvie.ui.theme.tr
 import noah.moohvie.viewmodels.QuizViewModel
 
 @Composable
@@ -46,7 +47,7 @@ fun QuizScreen(
                 title = {},
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour", tint = MooDark)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = tr("Retour"), tint = MooDark)
                     }
                 },
             )
@@ -66,11 +67,11 @@ fun QuizScreen(
                 LinearProgressIndicator(
                     progress = { viewModel.progress },
                     modifier = Modifier.fillMaxWidth(),
-                    color = MooOrangeDefault,
+                    color = LocalAccentColor.current,
                 )
 
                 Text(
-                    viewModel.currentQuestion.text,
+                    tr(viewModel.currentQuestion.text),
                     style = MaterialTheme.typography.titleLarge,
                     color = MooDark,
                 )
@@ -80,9 +81,9 @@ fun QuizScreen(
                         onClick = { viewModel.selectAnswer(option) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = MooOrangeDefault),
+                        colors = ButtonDefaults.buttonColors(containerColor = LocalAccentColor.current),
                     ) {
-                        Text(option.label, color = MooDark)
+                        Text(tr(option.label), color = MooDark)
                     }
                 }
             } else {

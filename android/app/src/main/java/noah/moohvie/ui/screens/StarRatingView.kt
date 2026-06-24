@@ -11,7 +11,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
+import noah.moohvie.ui.theme.tr
 
 @Composable
 fun StarRatingView(rating: Int, onRate: (Int) -> Unit) {
@@ -20,8 +21,8 @@ fun StarRatingView(rating: Int, onRate: (Int) -> Unit) {
             IconButton(onClick = { onRate(star) }, modifier = Modifier.size(28.dp)) {
                 Icon(
                     imageVector = if (star <= rating) Icons.Filled.Star else Icons.Filled.StarBorder,
-                    contentDescription = "$star étoiles",
-                    tint = MooOrangeDefault,
+                    contentDescription = "$star ${tr("étoiles")}",
+                    tint = LocalAccentColor.current,
                 )
             }
         }

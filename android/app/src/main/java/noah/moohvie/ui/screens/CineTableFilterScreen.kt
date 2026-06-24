@@ -30,8 +30,9 @@ import noah.moohvie.ui.theme.MooBeige
 import noah.moohvie.ui.theme.MooCoral
 import noah.moohvie.ui.theme.MooDark
 import noah.moohvie.ui.theme.MooGreen
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
 import noah.moohvie.ui.theme.MooTaupe
+import noah.moohvie.ui.theme.tr
 
 @Composable
 fun CineTableFilterScreen(
@@ -46,7 +47,7 @@ fun CineTableFilterScreen(
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         item {
-            Text("Trier par", style = MaterialTheme.typography.titleMedium, color = MooDark)
+            Text(tr("Trier par"), style = MaterialTheme.typography.titleMedium, color = MooDark)
         }
         items(CineTableSortOption.entries) { option ->
             OptionRow(
@@ -57,7 +58,7 @@ fun CineTableFilterScreen(
         }
 
         item {
-            Text("Genre", style = MaterialTheme.typography.titleMedium, color = MooDark)
+            Text(tr("Genre"), style = MaterialTheme.typography.titleMedium, color = MooDark)
         }
         item {
             OptionRow(
@@ -75,7 +76,7 @@ fun CineTableFilterScreen(
         }
 
         item {
-            Text("Ma note minimum", style = MaterialTheme.typography.titleMedium, color = MooDark)
+            Text(tr("Ma note minimum"), style = MaterialTheme.typography.titleMedium, color = MooDark)
         }
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -90,7 +91,7 @@ fun CineTableFilterScreen(
         }
 
         item {
-            Text("Note TMDB minimum", style = MaterialTheme.typography.titleMedium, color = MooDark)
+            Text(tr("Note TMDB minimum"), style = MaterialTheme.typography.titleMedium, color = MooDark)
         }
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -106,7 +107,7 @@ fun CineTableFilterScreen(
 
         item {
             TextButton(onClick = { onFiltersChange(CineTableFilterState()) }) {
-                Text("Réinitialiser les filtres", color = MooCoral)
+                Text(tr("Réinitialiser les filtres"), color = MooCoral)
             }
         }
 
@@ -114,9 +115,9 @@ fun CineTableFilterScreen(
             Button(
                 onClick = onDone,
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = MooOrangeDefault),
+                colors = ButtonDefaults.buttonColors(containerColor = LocalAccentColor.current),
             ) {
-                Text("OK", color = MooDark)
+                Text(tr("OK"), color = MooDark)
             }
         }
     }
@@ -136,7 +137,7 @@ private fun OptionRow(label: String, isSelected: Boolean, onClick: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(label, style = MaterialTheme.typography.bodyMedium, color = MooDark)
+            Text(tr(label), style = MaterialTheme.typography.bodyMedium, color = MooDark)
             Icon(
                 imageVector = if (isSelected) Icons.Filled.Check else Icons.Filled.RadioButtonUnchecked,
                 contentDescription = null,
@@ -151,11 +152,11 @@ private fun PillButton(label: String, isSelected: Boolean, onClick: () -> Unit) 
     Surface(
         onClick = onClick,
         modifier = Modifier.border(1.5.dp, MooBeige, RoundedCornerShape(10.dp)),
-        color = if (isSelected) MooOrangeDefault else androidx.compose.ui.graphics.Color.White,
+        color = if (isSelected) LocalAccentColor.current else androidx.compose.ui.graphics.Color.White,
         shape = RoundedCornerShape(10.dp),
     ) {
         Text(
-            label,
+            tr(label),
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
             color = if (isSelected) MooDark else MooTaupe,
             style = MaterialTheme.typography.labelMedium,

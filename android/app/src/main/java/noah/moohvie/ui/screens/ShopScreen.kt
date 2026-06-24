@@ -47,8 +47,9 @@ import noah.moohvie.services.ShopStore
 import noah.moohvie.ui.theme.MooBeige
 import noah.moohvie.ui.theme.MooDark
 import noah.moohvie.ui.theme.MooGreen
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
 import noah.moohvie.ui.theme.MooTaupe
+import noah.moohvie.ui.theme.tr
 
 @Composable
 fun ShopScreen(onBack: () -> Unit) {
@@ -60,10 +61,10 @@ fun ShopScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Boutique") },
+                title = { Text(tr("Boutique")) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour", tint = MooDark)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = tr("Retour"), tint = MooDark)
                     }
                 },
             )
@@ -71,7 +72,7 @@ fun ShopScreen(onBack: () -> Unit) {
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             Box(modifier = Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
-                Text("🔶 ${pointsStore.totalPoints} points", color = MooOrangeDefault)
+                Text("🔶 ${pointsStore.totalPoints} ${tr("points")}", color = LocalAccentColor.current)
             }
 
             SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
@@ -81,7 +82,7 @@ fun ShopScreen(onBack: () -> Unit) {
                         onClick = { selectedCategory = category },
                         shape = SegmentedButtonDefaults.itemShape(index = index, count = ShopItemCategory.entries.size),
                     ) {
-                        Text(category.label)
+                        Text(tr(category.label))
                     }
                 }
             }
@@ -133,29 +134,29 @@ private fun ShopItemRow(
         ShopItemIcon(item)
 
         Column(modifier = Modifier.weight(1f)) {
-            Text(item.name, style = MaterialTheme.typography.bodyMedium, color = MooDark)
+            Text(tr(item.name), style = MaterialTheme.typography.bodyMedium, color = MooDark)
             if (!isOwned) {
                 Text("🔶 ${item.cost}", style = MaterialTheme.typography.labelSmall, color = MooTaupe)
             }
         }
 
         when {
-            isEquipped -> Text("Équipé", style = MaterialTheme.typography.labelMedium, color = MooGreen)
+            isEquipped -> Text(tr("Équipé"), style = MaterialTheme.typography.labelMedium, color = MooGreen)
             isOwned -> Button(
                 onClick = onEquip,
-                colors = ButtonDefaults.buttonColors(containerColor = MooOrangeDefault),
+                colors = ButtonDefaults.buttonColors(containerColor = LocalAccentColor.current),
             ) {
-                Text("Équiper", color = androidx.compose.ui.graphics.Color.White)
+                Text(tr("Équiper"), color = androidx.compose.ui.graphics.Color.White)
             }
             else -> Button(
                 onClick = onPurchase,
                 enabled = totalPoints >= item.cost,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MooOrangeDefault.copy(alpha = 0.3f),
+                    containerColor = LocalAccentColor.current.copy(alpha = 0.3f),
                     disabledContainerColor = MooBeige,
                 ),
             ) {
-                Text("Acheter", color = MooDark)
+                Text(tr("Acheter"), color = MooDark)
             }
         }
     }
@@ -168,12 +169,12 @@ private fun ShopItemIcon(item: ShopItem) {
             modifier = Modifier
                 .size(32.dp)
                 .clip(CircleShape)
-                .background(item.accentColor ?: MooOrangeDefault),
+                .background(item.accentColor ?: LocalAccentColor.current),
         )
         ShopItemCategory.TITLE -> Icon(
             Icons.Filled.TextFields,
             contentDescription = null,
-            tint = MooOrangeDefault,
+            tint = LocalAccentColor.current,
             modifier = Modifier.size(32.dp),
         )
         ShopItemCategory.BADGE -> Box(modifier = Modifier.size(32.dp), contentAlignment = Alignment.Center) {

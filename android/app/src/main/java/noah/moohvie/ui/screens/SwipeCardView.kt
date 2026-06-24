@@ -25,7 +25,7 @@ import coil.compose.AsyncImage
 import noah.moohvie.models.Movie
 import noah.moohvie.ui.theme.MooBeige
 import noah.moohvie.ui.theme.MooDark
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
 import noah.moohvie.ui.theme.MooTaupe
 
 @Composable
@@ -58,7 +58,7 @@ fun SwipeCardView(movie: Movie, posterHeight: Int = 420, modifier: Modifier = Mo
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.Star, contentDescription = null, tint = MooOrangeDefault)
+                Icon(Icons.Filled.Star, contentDescription = null, tint = LocalAccentColor.current)
                 Text(
                     String.format("%.1f", movie.voteAverage),
                     color = MooDark,

@@ -52,8 +52,9 @@ import noah.moohvie.services.ShopStore
 import noah.moohvie.ui.theme.MooBeige
 import noah.moohvie.ui.theme.MooDark
 import noah.moohvie.ui.theme.MooGreen
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
 import noah.moohvie.ui.theme.MooTaupe
+import noah.moohvie.ui.theme.tr
 
 @Composable
 fun ProfileScreen(onBack: () -> Unit) {
@@ -70,10 +71,10 @@ fun ProfileScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Profil") },
+                title = { Text(tr("Profil")) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour", tint = MooDark)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = tr("Retour"), tint = MooDark)
                     }
                 },
             )
@@ -100,7 +101,7 @@ fun ProfileScreen(onBack: () -> Unit) {
                         if (draftUsername.isNotBlank()) profile.username = draftUsername
                         isEditingUsername = false
                     }) {
-                        Icon(Icons.Filled.Check, contentDescription = "Valider", tint = MooGreen)
+                        Icon(Icons.Filled.Check, contentDescription = tr("Valider"), tint = MooGreen)
                     }
                 }
             } else {
@@ -112,19 +113,19 @@ fun ProfileScreen(onBack: () -> Unit) {
                     },
                 ) {
                     Text(profile.username, style = MaterialTheme.typography.titleMedium, color = MooDark)
-                    Icon(Icons.Filled.Edit, contentDescription = "Modifier", tint = MooTaupe, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Filled.Edit, contentDescription = tr("Modifier"), tint = MooTaupe, modifier = Modifier.size(16.dp))
                 }
             }
 
             shop.equippedTitleName?.let {
-                Text(it, style = MaterialTheme.typography.bodyMedium, color = MooOrangeDefault)
+                Text(tr(it), style = MaterialTheme.typography.bodyMedium, color = LocalAccentColor.current)
             }
             shop.equippedBadgeIcon?.let {
                 Text(it, style = MaterialTheme.typography.headlineSmall)
             }
 
-            SectionPicker(category = ShopItemCategory.TITLE, title = "Titre équipé", shop = shop)
-            SectionPicker(category = ShopItemCategory.BADGE, title = "Badge équipé", shop = shop)
+            SectionPicker(category = ShopItemCategory.TITLE, title = tr("Titre équipé"), shop = shop)
+            SectionPicker(category = ShopItemCategory.BADGE, title = tr("Badge équipé"), shop = shop)
         }
     }
 }
@@ -140,7 +141,7 @@ private fun AvatarPicker(imagePath: String?, onClick: () -> Unit) {
         contentAlignment = Alignment.Center,
     ) {
         if (imagePath != null) {
-            AsyncImage(model = imagePath, contentDescription = "Avatar", modifier = Modifier.size(100.dp).clip(CircleShape))
+            AsyncImage(model = imagePath, contentDescription = tr("Avatar"), modifier = Modifier.size(100.dp).clip(CircleShape))
         } else {
             Text("🐮", style = MaterialTheme.typography.displaySmall)
         }
@@ -174,7 +175,7 @@ private fun ShopOptionRow(item: ShopItem, isEquipped: Boolean, onClick: () -> Un
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(item.name, style = MaterialTheme.typography.bodyMedium, color = MooDark)
+            Text(tr(item.name), style = MaterialTheme.typography.bodyMedium, color = MooDark)
             Icon(
                 imageVector = if (isEquipped) Icons.Filled.Check else Icons.Filled.RadioButtonUnchecked,
                 contentDescription = null,

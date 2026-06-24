@@ -56,8 +56,9 @@ import noah.moohvie.models.CineTableDisplayMode
 import noah.moohvie.models.WatchedMovie
 import noah.moohvie.ui.theme.MooBeige
 import noah.moohvie.ui.theme.MooDark
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
 import noah.moohvie.ui.theme.MooTaupe
+import noah.moohvie.ui.theme.tr
 import noah.moohvie.viewmodels.CineTableViewModel
 
 private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -74,16 +75,16 @@ fun CineTableScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Cinétable") },
+                title = { Text(tr("Cinétable")) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour", tint = MooDark)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = tr("Retour"), tint = MooDark)
                     }
                 },
                 actions = {
                     if (viewModel.store.watchedMovies.isNotEmpty()) {
                         IconButton(onClick = { showSearch = true }) {
-                            Icon(Icons.Filled.Add, contentDescription = "Ajouter un film", tint = MooOrangeDefault)
+                            Icon(Icons.Filled.Add, contentDescription = tr("Ajouter un film"), tint = LocalAccentColor.current)
                         }
                     }
                 },
@@ -104,7 +105,7 @@ fun CineTableScreen(
                 val displayedMovies = viewModel.displayedMovies
                 if (displayedMovies.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Aucun film ne correspond à ces filtres", color = MooTaupe)
+                        Text(tr("Aucun film ne correspond à ces filtres"), color = MooTaupe)
                     }
                 } else if (viewModel.displayMode == CineTableDisplayMode.GRID) {
                     LazyVerticalGrid(
@@ -150,18 +151,18 @@ fun CineTableScreen(
     movieToDelete?.let { movie ->
         AlertDialog(
             onDismissRequest = { movieToDelete = null },
-            title = { Text("Retirer ce film du Cinétable ?") },
+            title = { Text(tr("Retirer ce film du Cinétable ?")) },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.remove(movie.id)
                     movieToDelete = null
                 }) {
-                    Text("Retirer")
+                    Text(tr("Retirer"))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { movieToDelete = null }) {
-                    Text("Annuler")
+                    Text(tr("Annuler"))
                 }
             },
         )
@@ -184,15 +185,15 @@ private fun ControlsBar(
             IconButton(onClick = { onDisplayModeChange(CineTableDisplayMode.GRID) }) {
                 Icon(
                     Icons.Filled.GridView,
-                    contentDescription = "Grille",
-                    tint = if (displayMode == CineTableDisplayMode.GRID) MooOrangeDefault else MooTaupe,
+                    contentDescription = tr("Grille"),
+                    tint = if (displayMode == CineTableDisplayMode.GRID) LocalAccentColor.current else MooTaupe,
                 )
             }
             IconButton(onClick = { onDisplayModeChange(CineTableDisplayMode.LIST) }) {
                 Icon(
                     Icons.AutoMirrored.Filled.ViewList,
-                    contentDescription = "Liste",
-                    tint = if (displayMode == CineTableDisplayMode.LIST) MooOrangeDefault else MooTaupe,
+                    contentDescription = tr("Liste"),
+                    tint = if (displayMode == CineTableDisplayMode.LIST) LocalAccentColor.current else MooTaupe,
                 )
             }
         }
@@ -203,8 +204,8 @@ private fun ControlsBar(
                 containerColor = androidx.compose.ui.graphics.Color.Transparent,
             ),
         ) {
-            Icon(Icons.Filled.FilterAlt, contentDescription = null, tint = if (filtersActive) MooOrangeDefault else MooTaupe)
-            Text(" Filtres", color = if (filtersActive) MooOrangeDefault else MooTaupe)
+            Icon(Icons.Filled.FilterAlt, contentDescription = null, tint = if (filtersActive) LocalAccentColor.current else MooTaupe)
+            Text(" ${tr("Filtres")}", color = if (filtersActive) LocalAccentColor.current else MooTaupe)
         }
     }
 }
@@ -217,18 +218,18 @@ private fun EmptyState(modifier: Modifier = Modifier, onAddMovie: () -> Unit) {
         verticalArrangement = Arrangement.Center,
     ) {
         Text("🐮", style = MaterialTheme.typography.displaySmall)
-        Text("Ton Cinétable est vide", style = MaterialTheme.typography.titleLarge, color = MooDark)
+        Text(tr("Ton Cinétable est vide"), style = MaterialTheme.typography.titleLarge, color = MooDark)
         Text(
-            "Les films que vous regardez ensemble apparaîtront ici",
+            tr("Les films que vous regardez ensemble apparaîtront ici"),
             style = MaterialTheme.typography.bodyMedium,
             color = MooTaupe,
         )
         Button(
             onClick = onAddMovie,
-            colors = ButtonDefaults.buttonColors(containerColor = MooOrangeDefault),
+            colors = ButtonDefaults.buttonColors(containerColor = LocalAccentColor.current),
         ) {
             Icon(Icons.Filled.Search, contentDescription = null, tint = androidx.compose.ui.graphics.Color.White)
-            Text(" Ajouter un film", color = androidx.compose.ui.graphics.Color.White)
+            Text(" ${tr("Ajouter un film")}", color = androidx.compose.ui.graphics.Color.White)
         }
     }
 }
@@ -252,7 +253,7 @@ private fun GridCard(movie: WatchedMovie, onDelete: () -> Unit, onRate: (Int) ->
         Box {
             PosterThumbnail(movie, height = 180)
             IconButton(onClick = onDelete, modifier = Modifier.align(Alignment.TopEnd)) {
-                Icon(Icons.Filled.Cancel, contentDescription = "Retirer", tint = androidx.compose.ui.graphics.Color.White)
+                Icon(Icons.Filled.Cancel, contentDescription = tr("Retirer"), tint = androidx.compose.ui.graphics.Color.White)
             }
         }
         Text(movie.title, style = MaterialTheme.typography.labelMedium, color = MooDark, maxLines = 2)
@@ -266,7 +267,7 @@ private fun GridCard(movie: WatchedMovie, onDelete: () -> Unit, onRate: (Int) ->
             )
         }
         if (movie.pointsEarned > 0) {
-            Text("+${movie.pointsEarned} pts", style = MaterialTheme.typography.labelSmall, color = MooOrangeDefault)
+            Text("+${movie.pointsEarned} ${tr("pts")}", style = MaterialTheme.typography.labelSmall, color = LocalAccentColor.current)
         }
         StarRatingView(rating = movie.personalRating, onRate = onRate)
     }
@@ -292,7 +293,7 @@ private fun ListRow(movie: WatchedMovie, onDelete: () -> Unit, onRate: (Int) -> 
 
         Column(modifier = Modifier.weight(1f)) {
             Text(movie.title, style = MaterialTheme.typography.bodyMedium, color = MooDark, maxLines = 1)
-            Text(movie.primaryGenreName, style = MaterialTheme.typography.labelSmall, color = MooTaupe)
+            Text(tr(movie.primaryGenreName), style = MaterialTheme.typography.labelSmall, color = MooTaupe)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Filled.Star, contentDescription = null, tint = MooTaupe, modifier = Modifier.size(14.dp))
                 Text(String.format("%.1f", movie.voteAverage), style = MaterialTheme.typography.labelSmall, color = MooTaupe)
@@ -302,14 +303,14 @@ private fun ListRow(movie: WatchedMovie, onDelete: () -> Unit, onRate: (Int) -> 
                     color = MooTaupe,
                 )
                 if (movie.pointsEarned > 0) {
-                    Text(" • +${movie.pointsEarned} pts", style = MaterialTheme.typography.labelSmall, color = MooOrangeDefault)
+                    Text(" • +${movie.pointsEarned} ${tr("pts")}", style = MaterialTheme.typography.labelSmall, color = LocalAccentColor.current)
                 }
             }
             StarRatingView(rating = movie.personalRating, onRate = onRate)
         }
 
         IconButton(onClick = onDelete) {
-            Icon(Icons.Filled.Cancel, contentDescription = "Retirer", tint = MooOrangeDefault)
+            Icon(Icons.Filled.Cancel, contentDescription = tr("Retirer"), tint = LocalAccentColor.current)
         }
     }
 }

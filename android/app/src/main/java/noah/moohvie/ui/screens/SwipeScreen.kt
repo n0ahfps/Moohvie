@@ -45,8 +45,9 @@ import noah.moohvie.ui.theme.MooBeige
 import noah.moohvie.ui.theme.MooCoral
 import noah.moohvie.ui.theme.MooDark
 import noah.moohvie.ui.theme.MooGreen
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
 import noah.moohvie.ui.theme.MooTaupe
+import noah.moohvie.ui.theme.tr
 import noah.moohvie.viewmodels.QuizViewModel
 import noah.moohvie.viewmodels.SwipeViewModel
 
@@ -70,12 +71,12 @@ fun SwipeScreen(
         when {
             swipeViewModel.isLoading -> LoadingState()
             swipeViewModel.errorMessage != null -> Text(
-                swipeViewModel.errorMessage.orEmpty(),
+                tr(swipeViewModel.errorMessage.orEmpty()),
                 color = MooCoral,
             )
             swipeViewModel.matchedMovie != null -> MatchView(swipeViewModel, quizViewModel)
             swipeViewModel.movies.isEmpty() -> Text(
-                "Aucun film trouvé avec ces critères 😕",
+                tr("Aucun film trouvé avec ces critères 😕"),
                 color = MooDark,
             )
             swipeViewModel.isFinished -> NoMoreMoviesView(swipeViewModel, quizViewModel)
@@ -87,7 +88,7 @@ fun SwipeScreen(
 @Composable
 private fun LoadingState() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator(color = MooOrangeDefault)
+        CircularProgressIndicator(color = LocalAccentColor.current)
     }
 }
 
@@ -97,7 +98,7 @@ private fun SwipeContent(viewModel: SwipeViewModel) {
     val offsetX = remember { Animatable(0f) }
 
     Text(
-        "Swipez ensemble jusqu'au bon film",
+        tr("Swipez ensemble jusqu'au bon film"),
         style = MaterialTheme.typography.titleSmall,
         color = MooDark,
     )
@@ -137,17 +138,17 @@ private fun SwipeContent(viewModel: SwipeViewModel) {
 
     Button(
         onClick = { viewModel.pickRandom() },
-        colors = ButtonDefaults.buttonColors(containerColor = MooOrangeDefault.copy(alpha = 0.15f)),
+        colors = ButtonDefaults.buttonColors(containerColor = LocalAccentColor.current.copy(alpha = 0.15f)),
     ) {
-        Icon(Icons.Filled.Shuffle, contentDescription = null, tint = MooOrangeDefault)
-        Text(" Tirage aléatoire", color = MooOrangeDefault)
+        Icon(Icons.Filled.Shuffle, contentDescription = null, tint = LocalAccentColor.current)
+        Text(" ${tr("Tirage aléatoire")}", color = LocalAccentColor.current)
     }
 
     Row(horizontalArrangement = Arrangement.spacedBy(50.dp)) {
-        RoundActionButton(icon = Icons.Filled.Pets, background = MooCoral, label = "Un autre film") {
+        RoundActionButton(icon = Icons.Filled.Pets, background = MooCoral, label = tr("Un autre film")) {
             viewModel.skip()
         }
-        RoundActionButton(icon = Icons.Filled.NotificationsActive, background = MooGreen, label = "On regarde celui-là !") {
+        RoundActionButton(icon = Icons.Filled.NotificationsActive, background = MooGreen, label = tr("On regarde celui-là !")) {
             viewModel.selectThisMovie()
         }
     }
@@ -175,9 +176,9 @@ private fun RoundActionButton(
 
 @Composable
 private fun NoMoreMoviesView(swipeViewModel: SwipeViewModel, quizViewModel: QuizViewModel?) {
-    Text("😅 Plus de films à proposer", style = MaterialTheme.typography.titleMedium, color = MooDark)
+    Text(tr("😅 Plus de films à proposer"), style = MaterialTheme.typography.titleMedium, color = MooDark)
     Text(
-        "Vous avez passé tous les films disponibles. Réessayez avec d'autres critères !",
+        tr("Vous avez passé tous les films disponibles. Réessayez avec d'autres critères !"),
         style = MaterialTheme.typography.bodyMedium,
         color = MooTaupe,
     )
@@ -187,9 +188,9 @@ private fun NoMoreMoviesView(swipeViewModel: SwipeViewModel, quizViewModel: Quiz
             swipeViewModel.reset()
         },
         modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = MooOrangeDefault),
+        colors = ButtonDefaults.buttonColors(containerColor = LocalAccentColor.current),
     ) {
-        Text("Recommencer", color = MooDark)
+        Text(tr("Recommencer"), color = MooDark)
     }
 }
 
@@ -197,12 +198,12 @@ private fun NoMoreMoviesView(swipeViewModel: SwipeViewModel, quizViewModel: Quiz
 private fun MatchView(swipeViewModel: SwipeViewModel, quizViewModel: QuizViewModel?) {
     val movie = swipeViewModel.matchedMovie ?: return
 
-    Text("🎬 C'est parti !", style = MaterialTheme.typography.titleMedium, color = MooDark)
+    Text(tr("🎬 C'est parti !"), style = MaterialTheme.typography.titleMedium, color = MooDark)
 
     SwipeCardView(movie = movie, posterHeight = 170)
 
     swipeViewModel.matchedMovieProviders?.flatrate?.takeIf { it.isNotEmpty() }?.let { flatrate ->
-        Text("Disponible sur", style = MaterialTheme.typography.labelSmall, color = MooTaupe)
+        Text(tr("Disponible sur"), style = MaterialTheme.typography.labelSmall, color = MooTaupe)
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             flatrate.take(5).forEach { provider ->
                 AsyncImage(
@@ -220,7 +221,7 @@ private fun MatchView(swipeViewModel: SwipeViewModel, quizViewModel: QuizViewMod
     if (swipeViewModel.addedToCineTable) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = MooGreen)
-            Text(" Ajouté à ton Cinétable !", color = MooGreen)
+            Text(" ${tr("Ajouté à ton Cinétable !")}", color = MooGreen)
         }
     } else {
         Button(
@@ -229,7 +230,7 @@ private fun MatchView(swipeViewModel: SwipeViewModel, quizViewModel: QuizViewMod
                 .fillMaxWidth()
                 .border(1.5.dp, MooBeige, RoundedCornerShape(12.dp)),
         ) {
-            Text("On l'a regardé, ajouter au Cinétable", color = MooDark)
+            Text(tr("On l'a regardé, ajouter au Cinétable"), color = MooDark)
         }
     }
 
@@ -239,8 +240,8 @@ private fun MatchView(swipeViewModel: SwipeViewModel, quizViewModel: QuizViewMod
             swipeViewModel.reset()
         },
         modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = MooOrangeDefault),
+        colors = ButtonDefaults.buttonColors(containerColor = LocalAccentColor.current),
     ) {
-        Text("Recommencer", color = MooDark)
+        Text(tr("Recommencer"), color = MooDark)
     }
 }

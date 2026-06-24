@@ -12,6 +12,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import noah.moohvie.ui.theme.MooDark
+import noah.moohvie.ui.theme.tr
 
 @Composable
 fun SurpriseScreen(onBack: () -> Unit) {
@@ -21,7 +22,7 @@ fun SurpriseScreen(onBack: () -> Unit) {
                 title = {},
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour", tint = MooDark)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = tr("Retour"), tint = MooDark)
                     }
                 },
             )

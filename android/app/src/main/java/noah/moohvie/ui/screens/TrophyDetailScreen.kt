@@ -42,6 +42,7 @@ import noah.moohvie.services.TrophyEngine
 import noah.moohvie.ui.theme.MooBeige
 import noah.moohvie.ui.theme.MooDark
 import noah.moohvie.ui.theme.MooTaupe
+import noah.moohvie.ui.theme.tr
 
 private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
@@ -54,10 +55,10 @@ fun TrophyDetailScreen(trophyId: String, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(trophy.title) },
+                title = { Text(tr(trophy.title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour", tint = MooDark)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = tr("Retour"), tint = MooDark)
                     }
                 },
             )
@@ -72,7 +73,7 @@ fun TrophyDetailScreen(trophyId: String, onBack: () -> Unit) {
             items(trophy.milestones) { milestone -> MilestoneRow(milestone, trophy.count) }
             item {
                 Text(
-                    trophy.description,
+                    tr(trophy.description),
                     style = MaterialTheme.typography.bodySmall,
                     color = MooTaupe,
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
@@ -88,7 +89,7 @@ private fun TrophyHeader(trophy: TrophyProgress) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Icon(
             imageVector = trophyIcon(trophy.icon),
-            contentDescription = trophy.title,
+            contentDescription = tr(trophy.title),
             tint = tierColor,
             modifier = Modifier
                 .size(84.dp)
@@ -96,9 +97,9 @@ private fun TrophyHeader(trophy: TrophyProgress) {
                 .background(tierColor.copy(alpha = 0.15f))
                 .padding(20.dp),
         )
-        Text(trophy.title, style = MaterialTheme.typography.titleLarge, color = MooDark)
+        Text(tr(trophy.title), style = MaterialTheme.typography.titleLarge, color = MooDark)
         Text(
-            "${trophy.count} film${if (trophy.count == 1) "" else "s"} comptabilisé${if (trophy.count == 1) "" else "s"}",
+            "${trophy.count} ${tr(if (trophy.count == 1) "film" else "films")} ${tr(if (trophy.count == 1) "comptabilisé" else "comptabilisés")}",
             style = MaterialTheme.typography.bodyMedium,
             color = MooTaupe,
         )
@@ -125,17 +126,17 @@ private fun MilestoneRow(milestone: TrophyMilestone, currentCount: Int) {
         )
 
         Column(modifier = Modifier.weight(1f)) {
-            Text(milestone.tier.label, style = MaterialTheme.typography.bodyMedium, color = MooDark)
+            Text(tr(milestone.tier.label), style = MaterialTheme.typography.bodyMedium, color = MooDark)
             if (milestone.unlockedDate != null) {
                 Text(
-                    "Débloqué le ${dateFormat.format(Date(milestone.unlockedDate))}",
+                    "${tr("Débloqué le")} ${dateFormat.format(Date(milestone.unlockedDate))}",
                     style = MaterialTheme.typography.labelSmall,
                     color = MooTaupe,
                 )
             } else {
                 val remaining = milestone.threshold - currentCount
                 Text(
-                    "Encore $remaining film${if (remaining == 1) "" else "s"} pour ce palier (${milestone.threshold} requis)",
+                    "${tr("Encore")} $remaining ${tr(if (remaining == 1) "film" else "films")} ${tr("pour ce palier")} (${milestone.threshold} ${tr("requis")})",
                     style = MaterialTheme.typography.labelSmall,
                     color = MooTaupe,
                 )

@@ -38,8 +38,9 @@ import noah.moohvie.models.QuizLength
 import noah.moohvie.services.MoohPointsStore
 import noah.moohvie.services.ProfileStore
 import noah.moohvie.ui.theme.MooDark
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
 import noah.moohvie.ui.theme.MooTaupe
+import noah.moohvie.ui.theme.tr
 
 @Composable
 fun HomeScreen(
@@ -61,12 +62,12 @@ fun HomeScreen(
                 title = {},
                 navigationIcon = {
                     IconButton(onClick = onOpenShop) {
-                        Icon(Icons.Filled.Storefront, contentDescription = "Boutique", tint = MooOrangeDefault)
+                        Icon(Icons.Filled.Storefront, contentDescription = tr("Boutique"), tint = LocalAccentColor.current)
                     }
                 },
                 actions = {
                     IconButton(onClick = onOpenSettings) {
-                        Icon(Icons.Filled.Settings, contentDescription = "Réglages", tint = MooOrangeDefault)
+                        Icon(Icons.Filled.Settings, contentDescription = tr("Réglages"), tint = LocalAccentColor.current)
                     }
                 },
             )
@@ -84,7 +85,7 @@ fun HomeScreen(
             if (avatarPath != null) {
                 AsyncImage(
                     model = avatarPath,
-                    contentDescription = "Profil",
+                    contentDescription = tr("Profil"),
                     modifier = Modifier
                         .size(64.dp)
                         .clip(CircleShape)
@@ -103,27 +104,27 @@ fun HomeScreen(
                 color = MooDark,
             )
             Text(
-                "Trouvez le film du soir, ensemble",
+                tr("Trouvez le film du soir, ensemble"),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MooTaupe,
             )
             Text(
-                "🔶 ${pointsStore.totalPoints} points",
-                color = MooOrangeDefault,
+                "🔶 ${pointsStore.totalPoints} ${tr("points")}",
+                color = LocalAccentColor.current,
             )
 
-            ModeButton("Rapide", "5 questions essentielles") { onStartQuiz(QuizLength.SHORT) }
-            ModeButton("Équilibré", "12 questions pour mieux cibler") { onStartQuiz(QuizLength.MEDIUM) }
-            ModeButton("Précis", "20 questions pour un choix parfait") { onStartQuiz(QuizLength.LONG) }
-            ModeButton("🎲 Surprends-moi", "Aucune question, juste le hasard", onClick = onSurpriseMe)
+            ModeButton(tr("Rapide"), tr("5 questions essentielles")) { onStartQuiz(QuizLength.SHORT) }
+            ModeButton(tr("Équilibré"), tr("12 questions pour mieux cibler")) { onStartQuiz(QuizLength.MEDIUM) }
+            ModeButton(tr("Précis"), tr("20 questions pour un choix parfait")) { onStartQuiz(QuizLength.LONG) }
+            ModeButton(tr("🎲 Surprends-moi"), tr("Aucune question, juste le hasard"), onClick = onSurpriseMe)
 
             TextButton(onClick = onOpenCineTable) {
-                Icon(Icons.Filled.GridView, contentDescription = null, tint = MooOrangeDefault)
-                Text(" Mon Cinétable", color = MooOrangeDefault)
+                Icon(Icons.Filled.GridView, contentDescription = null, tint = LocalAccentColor.current)
+                Text(" ${tr("Mon Cinétable")}", color = LocalAccentColor.current)
             }
             TextButton(onClick = onOpenTrophies) {
-                Icon(Icons.Filled.EmojiEvents, contentDescription = null, tint = MooOrangeDefault)
-                Text(" Mes trophées", color = MooOrangeDefault)
+                Icon(Icons.Filled.EmojiEvents, contentDescription = null, tint = LocalAccentColor.current)
+                Text(" ${tr("Mes trophées")}", color = LocalAccentColor.current)
             }
         }
     }

@@ -36,8 +36,9 @@ import noah.moohvie.models.Movie
 import noah.moohvie.ui.theme.MooBeige
 import noah.moohvie.ui.theme.MooDark
 import noah.moohvie.ui.theme.MooGreen
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
 import noah.moohvie.ui.theme.MooTaupe
+import noah.moohvie.ui.theme.tr
 import noah.moohvie.viewmodels.MovieSearchViewModel
 
 @Composable
@@ -45,10 +46,10 @@ fun MovieSearchScreen(onClose: () -> Unit, viewModel: MovieSearchViewModel = vie
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Ajouter un film") },
+                title = { Text(tr("Ajouter un film")) },
                 navigationIcon = {
                     IconButton(onClick = onClose) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Fermer", tint = MooDark)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = tr("Fermer"), tint = MooDark)
                     }
                 },
             )
@@ -58,7 +59,7 @@ fun MovieSearchScreen(onClose: () -> Unit, viewModel: MovieSearchViewModel = vie
             OutlinedTextField(
                 value = viewModel.query,
                 onValueChange = viewModel::onQueryChange,
-                placeholder = { Text("Titre du film...") },
+                placeholder = { Text(tr("Titre du film...")) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
             )
@@ -68,13 +69,13 @@ fun MovieSearchScreen(onClose: () -> Unit, viewModel: MovieSearchViewModel = vie
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    CircularProgressIndicator(color = MooOrangeDefault)
+                    CircularProgressIndicator(color = LocalAccentColor.current)
                 }
                 viewModel.results.isEmpty() && viewModel.query.isNotEmpty() -> Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text("Aucun film trouvé", color = MooTaupe)
+                    Text(tr("Aucun film trouvé"), color = MooTaupe)
                 }
                 else -> LazyColumn(
                     modifier = Modifier.fillMaxSize().padding(top = 12.dp),
@@ -120,8 +121,8 @@ private fun SearchResultRow(movie: Movie, alreadyAdded: Boolean, onAdd: () -> Un
         IconButton(onClick = onAdd, enabled = !alreadyAdded) {
             Icon(
                 imageVector = if (alreadyAdded) Icons.Filled.CheckCircle else Icons.Filled.AddCircle,
-                contentDescription = if (alreadyAdded) "Déjà ajouté" else "Ajouter",
-                tint = if (alreadyAdded) MooGreen else MooOrangeDefault,
+                contentDescription = if (alreadyAdded) tr("Déjà ajouté") else tr("Ajouter"),
+                tint = if (alreadyAdded) MooGreen else LocalAccentColor.current,
             )
         }
     }

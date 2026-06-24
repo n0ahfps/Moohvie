@@ -38,8 +38,9 @@ import noah.moohvie.services.AppSettings
 import noah.moohvie.ui.theme.MooBeige
 import noah.moohvie.ui.theme.MooDark
 import noah.moohvie.ui.theme.MooGreen
-import noah.moohvie.ui.theme.MooOrangeDefault
+import noah.moohvie.ui.theme.LocalAccentColor
 import noah.moohvie.ui.theme.MooTaupe
+import noah.moohvie.ui.theme.tr
 
 @Composable
 fun SettingsScreen(onClose: () -> Unit) {
@@ -52,7 +53,7 @@ fun SettingsScreen(onClose: () -> Unit) {
                 title = {},
                 actions = {
                     TextButton(onClick = onClose) {
-                        Text("Fermer", color = MooOrangeDefault)
+                        Text(tr("Fermer"), color = LocalAccentColor.current)
                     }
                 },
             )
@@ -63,13 +64,13 @@ fun SettingsScreen(onClose: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(28.dp),
         ) {
             item {
-                Text("Paramètres", style = MaterialTheme.typography.headlineMedium, color = MooDark)
+                Text(tr("Paramètres"), style = MaterialTheme.typography.headlineMedium, color = MooDark)
             }
 
             item {
                 SettingsSection(
-                    title = "Mes plateformes de streaming",
-                    description = "Sélectionne tes abonnements pour ne voir que des films que tu peux regarder direct. Laisse tout décoché pour ne pas filtrer.",
+                    title = tr("Mes plateformes de streaming"),
+                    description = tr("Sélectionne tes abonnements pour ne voir que des films que tu peux regarder direct. Laisse tout décoché pour ne pas filtrer."),
                 )
             }
             items(StreamingProviderOption.all) { provider ->
@@ -89,8 +90,8 @@ fun SettingsScreen(onClose: () -> Unit) {
 
             item {
                 SettingsSection(
-                    title = "Contenu maximum",
-                    description = "Exclut les films classés au-dessus de ce seuil (violence, sexe, etc.)",
+                    title = tr("Contenu maximum"),
+                    description = tr("Exclut les films classés au-dessus de ce seuil (violence, sexe, etc.)"),
                 )
             }
             items(FrenchCertification.entries) { cert ->
@@ -102,7 +103,7 @@ fun SettingsScreen(onClose: () -> Unit) {
             }
 
             item {
-                SettingsSection(title = "Langue")
+                SettingsSection(title = tr("Langue"))
             }
             items(AppLanguage.entries) { language ->
                 OptionRow(
@@ -113,7 +114,7 @@ fun SettingsScreen(onClose: () -> Unit) {
             }
 
             item {
-                SettingsSection(title = "Cinétable")
+                SettingsSection(title = tr("Cinétable"))
             }
             item {
                 Row(
@@ -124,7 +125,7 @@ fun SettingsScreen(onClose: () -> Unit) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("Revoir les films déjà vus", style = MaterialTheme.typography.bodyMedium, color = MooDark)
+                    Text(tr("Revoir les films déjà vus"), style = MaterialTheme.typography.bodyMedium, color = MooDark)
                     Switch(
                         checked = settings.allowRewatching,
                         onCheckedChange = { settings.allowRewatching = it },
@@ -134,7 +135,7 @@ fun SettingsScreen(onClose: () -> Unit) {
             }
             item {
                 Text(
-                    "Si désactivé, les films de ton Cinétable ne seront plus proposés.",
+                    tr("Si désactivé, les films de ton Cinétable ne seront plus proposés."),
                     style = MaterialTheme.typography.labelSmall,
                     color = MooTaupe,
                 )
@@ -168,7 +169,7 @@ private fun OptionRow(label: String, isSelected: Boolean, onClick: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(label, style = MaterialTheme.typography.bodyMedium, color = MooDark)
+            Text(tr(label), style = MaterialTheme.typography.bodyMedium, color = MooDark)
             Icon(
                 imageVector = if (isSelected) Icons.Filled.Check else Icons.Filled.RadioButtonUnchecked,
                 contentDescription = null,

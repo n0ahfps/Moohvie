@@ -37,6 +37,7 @@ import noah.moohvie.services.TrophyEngine
 import noah.moohvie.ui.theme.MooBeige
 import noah.moohvie.ui.theme.MooDark
 import noah.moohvie.ui.theme.MooTaupe
+import noah.moohvie.ui.theme.tr
 
 @Composable
 fun TrophiesScreen(onBack: () -> Unit, onOpenTrophy: (TrophyProgress) -> Unit) {
@@ -47,10 +48,10 @@ fun TrophiesScreen(onBack: () -> Unit, onOpenTrophy: (TrophyProgress) -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Trophées") },
+                title = { Text(tr("Trophées")) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour", tint = MooDark)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = tr("Retour"), tint = MooDark)
                     }
                 },
             )
@@ -85,7 +86,7 @@ private fun TrophyCard(trophy: TrophyProgress, onClick: () -> Unit) {
     ) {
         Icon(
             imageVector = trophyIcon(trophy.icon),
-            contentDescription = trophy.title,
+            contentDescription = tr(trophy.title),
             tint = tierColor,
             modifier = Modifier
                 .size(56.dp)
@@ -95,7 +96,7 @@ private fun TrophyCard(trophy: TrophyProgress, onClick: () -> Unit) {
         )
 
         Text(
-            trophy.title,
+            tr(trophy.title),
             style = MaterialTheme.typography.labelMedium,
             color = MooDark,
             maxLines = 2,
@@ -103,13 +104,13 @@ private fun TrophyCard(trophy: TrophyProgress, onClick: () -> Unit) {
         )
 
         Text(
-            trophy.tier?.label ?: "Non débloqué",
+            trophy.tier?.label?.let { tr(it) } ?: tr("Non débloqué"),
             style = MaterialTheme.typography.labelSmall,
             color = if (trophy.tier != null) tierColor else MooTaupe,
         )
 
         Text(
-            trophy.nextThreshold?.let { "${trophy.count}/$it" } ?: "Maîtrisé",
+            trophy.nextThreshold?.let { "${trophy.count}/$it" } ?: tr("Maîtrisé"),
             style = MaterialTheme.typography.labelSmall,
             color = MooTaupe,
         )
