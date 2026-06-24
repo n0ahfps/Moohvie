@@ -1,13 +1,15 @@
 package noah.moohvie.models
 
-import java.util.Date
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class WatchedMovie(
     val id: Int,
     val title: String,
     val posterPath: String?,
     val voteAverage: Double,
-    val watchedDate: Date,
+    /** Epoch millis (équivalent de `Date` côté iOS). */
+    val watchedDate: Long,
     val personalRating: Int = 0,
     val genreIDs: List<Int> = emptyList(),
     val pointsEarned: Int = 0,

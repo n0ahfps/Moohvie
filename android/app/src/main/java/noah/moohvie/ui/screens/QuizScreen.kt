@@ -6,12 +6,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -33,7 +38,18 @@ fun QuizScreen(
         viewModel.start(quizLength)
     }
 
-    Scaffold { padding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Retour", tint = MooDark)
+                    }
+                },
+            )
+        },
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -68,15 +84,7 @@ fun QuizScreen(
                     }
                 }
             } else {
-                // Le swipe à deux (étape suivante du quiz) arrive dans une prochaine PR de portage.
-                Text(
-                    "Quiz terminé ! Genres retenus : ${viewModel.finalGenres.joinToString()}",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MooDark,
-                )
-                Button(onClick = onBack) {
-                    Text("Retour à l'accueil")
-                }
+                SwipeScreen(quizViewModel = viewModel)
             }
         }
     }
