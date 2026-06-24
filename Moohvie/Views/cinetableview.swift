@@ -201,10 +201,24 @@ struct CineTableView: View {
                     .foregroundColor(.mooTaupe)
             }
 
+            if movie.pointsEarned > 0 {
+                pointsBadge(movie.pointsEarned)
+            }
+
             StarRatingView(rating: movie.personalRating) { newRating in
                 store.setRating(movie.id, rating: newRating)
             }
         }
+    }
+
+    private func pointsBadge(_ points: Int) -> some View {
+        HStack(spacing: 3) {
+            Image(systemName: "seal.fill")
+            Text("+\(points)")
+        }
+        .font(.caption2)
+        .fontWeight(.bold)
+        .foregroundColor(.mooOrange)
     }
 
     private func listRow(_ movie: WatchedMovie) -> some View {
@@ -241,6 +255,12 @@ struct CineTableView: View {
                     Text("• \(movie.watchedDate.formatted(.dateTime.day().month().year()))")
                         .font(.caption2)
                         .foregroundColor(.mooTaupe)
+                    if movie.pointsEarned > 0 {
+                        Text("•")
+                            .font(.caption2)
+                            .foregroundColor(.mooTaupe)
+                        pointsBadge(movie.pointsEarned)
+                    }
                 }
 
                 StarRatingView(rating: movie.personalRating) { newRating in
