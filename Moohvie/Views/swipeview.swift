@@ -58,7 +58,11 @@ struct SwipeView: View {
                 }
                 .font(.system(.caption, design: .rounded, weight: .bold))
                 .foregroundColor(.mooOrange)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
 
             if let movie = swipeViewModel.currentMovie {
                 SwipeCardView(movie: movie, posterHeight: 280)
