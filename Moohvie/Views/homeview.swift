@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @State private var showSettings = false
     @ObservedObject private var pointsStore = MoohPointsStore.shared
+    @ObservedObject private var profile = ProfileStore.shared
 
     var body: some View {
         NavigationStack {
@@ -13,8 +14,20 @@ struct HomeView: View {
                     Spacer()
 
                     VStack(spacing: 8) {
-                        Text("🐮")
-                            .font(.system(size: 64))
+                        NavigationLink {
+                            ProfileView()
+                        } label: {
+                            if let profileImage = profile.profileImage {
+                                profileImage
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 64, height: 64)
+                                    .clipShape(Circle())
+                            } else {
+                                Text("🐮")
+                                    .font(.system(size: 64))
+                            }
+                        }
                         Text("MoohVie")
                             .font(.system(.largeTitle, design: .rounded, weight: .bold))
                             .foregroundColor(.mooDark)
@@ -93,6 +106,14 @@ struct HomeView: View {
                 }
             }
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink {
+                        ShopView()
+                    } label: {
+                        Image(systemName: "storefront.fill")
+                            .foregroundColor(.mooOrange)
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showSettings = true
