@@ -24,7 +24,7 @@ import noah.moohvie.ui.theme.MooOrangeDefault
 import noah.moohvie.ui.theme.MooTaupe
 
 @Composable
-fun HomeScreen(onStartQuiz: (QuizLength) -> Unit) {
+fun HomeScreen(onStartQuiz: (QuizLength) -> Unit, onSurpriseMe: () -> Unit) {
     val pointsStore = MoohPointsStore.getInstance(LocalContext.current)
 
     Scaffold { padding ->
@@ -55,6 +55,7 @@ fun HomeScreen(onStartQuiz: (QuizLength) -> Unit) {
             ModeButton("Rapide", "5 questions essentielles") { onStartQuiz(QuizLength.SHORT) }
             ModeButton("Équilibré", "12 questions pour mieux cibler") { onStartQuiz(QuizLength.MEDIUM) }
             ModeButton("Précis", "20 questions pour un choix parfait") { onStartQuiz(QuizLength.LONG) }
+            ModeButton("🎲 Surprends-moi", "Aucune question, juste le hasard", onClick = onSurpriseMe)
         }
     }
 }

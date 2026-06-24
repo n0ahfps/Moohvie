@@ -53,6 +53,7 @@ import noah.moohvie.viewmodels.SwipeViewModel
 @Composable
 fun SwipeScreen(
     quizViewModel: QuizViewModel?,
+    modifier: Modifier = Modifier,
     swipeViewModel: SwipeViewModel = viewModel(),
 ) {
     LaunchedEffect(Unit) {
@@ -60,7 +61,7 @@ fun SwipeScreen(
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import noah.moohvie.models.QuizLength
 import noah.moohvie.ui.screens.HomeScreen
 import noah.moohvie.ui.screens.QuizScreen
+import noah.moohvie.ui.screens.SurpriseScreen
 import noah.moohvie.ui.theme.MoohvieTheme
 
 class MainActivity : ComponentActivity() {
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
 private object Routes {
     const val HOME = "home"
     const val QUIZ = "quiz/{quizLength}"
+    const val SURPRISE = "surprise"
 
     fun quiz(quizLength: QuizLength) = "quiz/${quizLength.name}"
 }
@@ -43,6 +45,7 @@ private fun MoohvieNavHost() {
                 onStartQuiz = { quizLength ->
                     navController.navigate(Routes.quiz(quizLength))
                 },
+                onSurpriseMe = { navController.navigate(Routes.SURPRISE) },
             )
         }
         composable(Routes.QUIZ) { backStackEntry ->
@@ -50,6 +53,9 @@ private fun MoohvieNavHost() {
                 backStackEntry.arguments?.getString("quizLength") ?: QuizLength.SHORT.name
             )
             QuizScreen(quizLength = quizLength, onBack = { navController.popBackStack() })
+        }
+        composable(Routes.SURPRISE) {
+            SurpriseScreen(onBack = { navController.popBackStack() })
         }
     }
 }
