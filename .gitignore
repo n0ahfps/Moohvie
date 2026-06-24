@@ -7,3 +7,10 @@ DerivedData/
 
 # API keys / secrets
 Moohvie/Utils/secrets.swift
+android/local.properties
+
+# Android build
+android/.gradle/
+android/build/
+android/app/build/
+android/.idea/
