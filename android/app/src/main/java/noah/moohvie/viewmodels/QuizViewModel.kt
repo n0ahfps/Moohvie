@@ -28,7 +28,7 @@ class QuizViewModel : ViewModel() {
     var maxReleaseYear: Int? by mutableStateOf(null)
         private set
 
-    var questions: List<Question> = emptyList()
+    var questions: List<Question> by mutableStateOf(emptyList())
         private set
 
     fun start(length: QuizLength) {
