@@ -49,21 +49,6 @@ struct SwipeView: View {
                 .font(.system(.subheadline, design: .rounded, weight: .bold))
                 .foregroundColor(.mooDark)
 
-            Button {
-                swipeViewModel.pickRandom()
-            } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: "shuffle")
-                    Text("Tirage aléatoire")
-                }
-                .font(.system(.caption, design: .rounded, weight: .bold))
-                .foregroundColor(.mooOrange)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-
             if let movie = swipeViewModel.currentMovie {
                 SwipeCardView(movie: movie, posterHeight: 280)
                     .offset(dragOffset)
@@ -89,6 +74,8 @@ struct SwipeView: View {
             }
 
             Spacer(minLength: 4)
+
+            randomPickButton
 
             HStack(spacing: 50) {
                 Button {
@@ -144,6 +131,26 @@ struct SwipeView: View {
             swipeViewModel.skip()
             dragOffset = .zero
         }
+    }
+
+    private var randomPickButton: some View {
+        Button(action: pickRandomMovie) {
+            HStack(spacing: 6) {
+                Image(systemName: "shuffle")
+                Text("Tirage aléatoire")
+            }
+            .font(.system(.caption, design: .rounded, weight: .bold))
+            .foregroundColor(.mooOrange)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(Color.mooOrange.opacity(0.15))
+            .clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func pickRandomMovie() {
+        swipeViewModel.pickRandom()
     }
 
     private var noMoreMoviesView: some View {
