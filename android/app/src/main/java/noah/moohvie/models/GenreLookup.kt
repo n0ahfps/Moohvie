@@ -1,7 +1,7 @@
 package noah.moohvie.models
 
 object GenreLookup {
-    private val names: Map<Int, String> = mapOf(
+    val names: Map<Int, String> = mapOf(
         28 to "Action",
         12 to "Aventure",
         16 to "Animation",

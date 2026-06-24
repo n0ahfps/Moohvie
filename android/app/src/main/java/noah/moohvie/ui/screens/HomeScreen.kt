@@ -7,11 +7,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +28,11 @@ import noah.moohvie.ui.theme.MooOrangeDefault
 import noah.moohvie.ui.theme.MooTaupe
 
 @Composable
-fun HomeScreen(onStartQuiz: (QuizLength) -> Unit, onSurpriseMe: () -> Unit) {
+fun HomeScreen(
+    onStartQuiz: (QuizLength) -> Unit,
+    onSurpriseMe: () -> Unit,
+    onOpenCineTable: () -> Unit,
+) {
     val pointsStore = MoohPointsStore.getInstance(LocalContext.current)
 
     Scaffold { padding ->
@@ -56,6 +64,11 @@ fun HomeScreen(onStartQuiz: (QuizLength) -> Unit, onSurpriseMe: () -> Unit) {
             ModeButton("Équilibré", "12 questions pour mieux cibler") { onStartQuiz(QuizLength.MEDIUM) }
             ModeButton("Précis", "20 questions pour un choix parfait") { onStartQuiz(QuizLength.LONG) }
             ModeButton("🎲 Surprends-moi", "Aucune question, juste le hasard", onClick = onSurpriseMe)
+
+            TextButton(onClick = onOpenCineTable) {
+                Icon(Icons.Filled.GridView, contentDescription = null, tint = MooOrangeDefault)
+                Text(" Mon Cinétable", color = MooOrangeDefault)
+            }
         }
     }
 }

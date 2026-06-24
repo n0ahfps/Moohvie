@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import noah.moohvie.models.QuizLength
+import noah.moohvie.ui.screens.CineTableScreen
 import noah.moohvie.ui.screens.HomeScreen
 import noah.moohvie.ui.screens.QuizScreen
 import noah.moohvie.ui.screens.SurpriseScreen
@@ -32,6 +33,7 @@ private object Routes {
     const val HOME = "home"
     const val QUIZ = "quiz/{quizLength}"
     const val SURPRISE = "surprise"
+    const val CINETABLE = "cinetable"
 
     fun quiz(quizLength: QuizLength) = "quiz/${quizLength.name}"
 }
@@ -46,6 +48,7 @@ private fun MoohvieNavHost() {
                     navController.navigate(Routes.quiz(quizLength))
                 },
                 onSurpriseMe = { navController.navigate(Routes.SURPRISE) },
+                onOpenCineTable = { navController.navigate(Routes.CINETABLE) },
             )
         }
         composable(Routes.QUIZ) { backStackEntry ->
@@ -56,6 +59,9 @@ private fun MoohvieNavHost() {
         }
         composable(Routes.SURPRISE) {
             SurpriseScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Routes.CINETABLE) {
+            CineTableScreen(onBack = { navController.popBackStack() })
         }
     }
 }

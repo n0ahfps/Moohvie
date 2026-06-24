@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package noah.moohvie.ui.screens
 
 import androidx.compose.material.icons.Icons
