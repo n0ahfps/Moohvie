@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var showSettings = false
+    @ObservedObject private var pointsStore = MoohPointsStore.shared
 
     var body: some View {
         NavigationStack {
@@ -20,6 +21,18 @@ struct HomeView: View {
                         Text("Trouvez le film du soir, ensemble")
                             .font(.system(.subheadline, design: .rounded, weight: .bold))
                             .foregroundColor(.mooTaupe)
+
+                        HStack(spacing: 6) {
+                            Image(systemName: "seal.fill")
+                            Text("\(pointsStore.totalPoints) points")
+                        }
+                        .font(.system(.subheadline, design: .rounded, weight: .bold))
+                        .foregroundColor(.mooOrange)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 6)
+                        .background(Color.mooOrange.opacity(0.15))
+                        .clipShape(Capsule())
+                        .padding(.top, 4)
                     }
 
                     Spacer()

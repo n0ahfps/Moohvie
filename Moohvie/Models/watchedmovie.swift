@@ -8,6 +8,7 @@ struct WatchedMovie: Identifiable, Codable {
     let watchedDate: Date
     var personalRating: Int = 0
     var genreIDs: [Int] = []
+    var pointsEarned: Int = 0
 
     var posterURL: URL? {
         guard let posterPath else { return nil }

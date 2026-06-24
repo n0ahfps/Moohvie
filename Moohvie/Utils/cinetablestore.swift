@@ -30,15 +30,18 @@ class CineTableStore: ObservableObject {
 
     func add(_ movie: Movie) {
         guard !isWatched(movie.id) else { return }
+        let points = movie.rarityPoints
         let entry = WatchedMovie(
             id: movie.id,
             title: movie.title,
             posterPath: movie.posterPath,
             voteAverage: movie.voteAverage,
             watchedDate: Date(),
-            genreIDs: movie.genreIDs
+            genreIDs: movie.genreIDs,
+            pointsEarned: points
         )
         watchedMovies.insert(entry, at: 0)
+        MoohPointsStore.shared.award(points)
     }
 
     func isWatched(_ movieID: Int) -> Bool {
@@ -50,6 +53,9 @@ class CineTableStore: ObservableObject {
     }
 
     func remove(_ movieID: Int) {
+        if let movie = watchedMovies.first(where: { $0.id == movieID }) {
+            MoohPointsStore.shared.refund(movie.pointsEarned)
+        }
         watchedMovies.removeAll { $0.id == movieID }
     }
 
