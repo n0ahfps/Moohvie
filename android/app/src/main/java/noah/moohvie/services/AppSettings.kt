@@ -12,36 +12,44 @@ class AppSettings private constructor(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("moohvie_settings", Context.MODE_PRIVATE)
 
-    var selectedProviderIDs: Set<Int> by mutableStateOf(
+    private val selectedProviderIDsState = mutableStateOf(
         (prefs.getStringSet("selectedProviderIDs", emptySet()) ?: emptySet())
             .mapNotNull { it.toIntOrNull() }
             .toSet()
     )
+    var selectedProviderIDs: Set<Int>
+        get() = selectedProviderIDsState.value
         set(value) {
-            field = value
+            selectedProviderIDsState.value = value
             prefs.edit().putStringSet("selectedProviderIDs", value.map { it.toString() }.toSet()).apply()
         }
 
-    var maxCertification: FrenchCertification by mutableStateOf(
+    private val maxCertificationState = mutableStateOf(
         FrenchCertification.fromRawValue(prefs.getString("maxCertification", FrenchCertification.ALL.rawValue)!!)
     )
+    var maxCertification: FrenchCertification
+        get() = maxCertificationState.value
         set(value) {
-            field = value
+            maxCertificationState.value = value
             prefs.edit().putString("maxCertification", value.rawValue).apply()
         }
 
-    var allowRewatching: Boolean by mutableStateOf(prefs.getBoolean("allowRewatching", false))
+    private val allowRewatchingState = mutableStateOf(prefs.getBoolean("allowRewatching", false))
+    var allowRewatching: Boolean
+        get() = allowRewatchingState.value
         set(value) {
-            field = value
+            allowRewatchingState.value = value
             prefs.edit().putBoolean("allowRewatching", value).apply()
         }
 
-    var appLanguage: AppLanguage by mutableStateOf(
+    private val appLanguageState = mutableStateOf(
         AppLanguage.entries.firstOrNull { it.name == prefs.getString("appLanguage", AppLanguage.SYSTEM.name) }
             ?: AppLanguage.SYSTEM
     )
+    var appLanguage: AppLanguage
+        get() = appLanguageState.value
         set(value) {
-            field = value
+            appLanguageState.value = value
             prefs.edit().putString("appLanguage", value.name).apply()
         }
 
