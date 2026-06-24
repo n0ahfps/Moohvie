@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.Card
@@ -46,6 +47,7 @@ fun HomeScreen(
     onOpenCineTable: () -> Unit,
     onOpenShop: () -> Unit,
     onOpenProfile: () -> Unit,
+    onOpenTrophies: () -> Unit,
 ) {
     val context = LocalContext.current
     val pointsStore = remember { MoohPointsStore.getInstance(context) }
@@ -111,6 +113,10 @@ fun HomeScreen(
             TextButton(onClick = onOpenCineTable) {
                 Icon(Icons.Filled.GridView, contentDescription = null, tint = MooOrangeDefault)
                 Text(" Mon Cinétable", color = MooOrangeDefault)
+            }
+            TextButton(onClick = onOpenTrophies) {
+                Icon(Icons.Filled.EmojiEvents, contentDescription = null, tint = MooOrangeDefault)
+                Text(" Mes trophées", color = MooOrangeDefault)
             }
         }
     }

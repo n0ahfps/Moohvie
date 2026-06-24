@@ -1,11 +1,10 @@
 package noah.moohvie.models
 
-import java.util.Date
-
 data class TrophyMilestone(
     val tier: TrophyTier,
     val threshold: Int,
-    val unlockedDate: Date?,
+    /** Epoch millis (équivalent de `Date` côté iOS). */
+    val unlockedDate: Long?,
 ) {
     val isUnlocked: Boolean get() = unlockedDate != null
 }

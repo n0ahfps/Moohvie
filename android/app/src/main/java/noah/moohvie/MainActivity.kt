@@ -16,6 +16,8 @@ import noah.moohvie.ui.screens.ProfileScreen
 import noah.moohvie.ui.screens.QuizScreen
 import noah.moohvie.ui.screens.ShopScreen
 import noah.moohvie.ui.screens.SurpriseScreen
+import noah.moohvie.ui.screens.TrophiesScreen
+import noah.moohvie.ui.screens.TrophyDetailScreen
 import noah.moohvie.ui.theme.MoohvieTheme
 
 class MainActivity : ComponentActivity() {
@@ -38,8 +40,11 @@ private object Routes {
     const val CINETABLE = "cinetable"
     const val SHOP = "shop"
     const val PROFILE = "profile"
+    const val TROPHIES = "trophies"
+    const val TROPHY_DETAIL = "trophies/{trophyId}"
 
     fun quiz(quizLength: QuizLength) = "quiz/${quizLength.name}"
+    fun trophyDetail(trophyId: String) = "trophies/$trophyId"
 }
 
 @androidx.compose.runtime.Composable
@@ -55,6 +60,7 @@ private fun MoohvieNavHost() {
                 onOpenCineTable = { navController.navigate(Routes.CINETABLE) },
                 onOpenShop = { navController.navigate(Routes.SHOP) },
                 onOpenProfile = { navController.navigate(Routes.PROFILE) },
+                onOpenTrophies = { navController.navigate(Routes.TROPHIES) },
             )
         }
         composable(Routes.QUIZ) { backStackEntry ->
@@ -74,6 +80,16 @@ private fun MoohvieNavHost() {
         }
         composable(Routes.PROFILE) {
             ProfileScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Routes.TROPHIES) {
+            TrophiesScreen(
+                onBack = { navController.popBackStack() },
+                onOpenTrophy = { trophy -> navController.navigate(Routes.trophyDetail(trophy.id)) },
+            )
+        }
+        composable(Routes.TROPHY_DETAIL) { backStackEntry ->
+            val trophyId = backStackEntry.arguments?.getString("trophyId") ?: return@composable
+            TrophyDetailScreen(trophyId = trophyId, onBack = { navController.popBackStack() })
         }
     }
 }
