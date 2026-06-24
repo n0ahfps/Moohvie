@@ -28,7 +28,7 @@ class TMDBService {
 
         var queryItems = [
             URLQueryItem(name: "api_key", value: apiKey),
-            URLQueryItem(name: "language", value: "fr-FR"),
+            URLQueryItem(name: "language", value: await MainActor.run { AppSettings.shared.appLanguage.tmdbLanguageCode }),
             URLQueryItem(name: "sort_by", value: "popularity.desc"),
             URLQueryItem(name: "page", value: String(page)),
             URLQueryItem(name: "vote_count.gte", value: "100")
@@ -106,7 +106,7 @@ class TMDBService {
         var components = URLComponents(string: "\(baseURL)/search/movie")
         components?.queryItems = [
             URLQueryItem(name: "api_key", value: apiKey),
-            URLQueryItem(name: "language", value: "fr-FR"),
+            URLQueryItem(name: "language", value: await MainActor.run { AppSettings.shared.appLanguage.tmdbLanguageCode }),
             URLQueryItem(name: "query", value: query),
             URLQueryItem(name: "include_adult", value: "false")
         ]

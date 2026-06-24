@@ -46,6 +46,18 @@ struct SettingsView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 12) {
+                        Text("Langue")
+                            .font(.system(.headline, design: .rounded, weight: .bold))
+                            .foregroundColor(.mooDark)
+
+                        VStack(spacing: 8) {
+                            ForEach(AppLanguage.allCases, id: \.self) { language in
+                                languageRow(language)
+                            }
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 12) {
                         Text("Cinétable")
                             .font(.system(.headline, design: .rounded, weight: .bold))
                             .foregroundColor(.mooDark)
@@ -111,13 +123,36 @@ struct SettingsView: View {
         }
     }
 
+    private func languageRow(_ language: AppLanguage) -> some View {
+        let isSelected = settings.appLanguage == language
+        return Button {
+            settings.appLanguage = language
+        } label: {
+            HStack {
+                Text(LocalizedStringKey(language.label))
+                    .font(.system(.body, design: .rounded, weight: .bold))
+                    .foregroundColor(.mooDark)
+                Spacer()
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(isSelected ? .mooGreen : .mooTaupe)
+            }
+            .padding()
+            .background(Color.white)
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.mooBeige, lineWidth: 1.5)
+            )
+        }
+    }
+
     private func certificationRow(_ cert: FrenchCertification) -> some View {
         let isSelected = settings.maxCertification == cert
         return Button {
             settings.maxCertification = cert
         } label: {
             HStack {
-                Text(cert.rawValue)
+                Text(LocalizedStringKey(cert.rawValue))
                     .font(.system(.body, design: .rounded, weight: .bold))
                     .foregroundColor(.mooDark)
                 Spacer()

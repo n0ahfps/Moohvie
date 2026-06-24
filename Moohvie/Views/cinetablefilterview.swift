@@ -55,7 +55,7 @@ struct CineTableFilterView: View {
                                 Button {
                                     filters.minPersonalRating = value
                                 } label: {
-                                    Text(value == 0 ? "Toutes" : "\(value)+ ⭐")
+                                    Text(value == 0 ? LocalizedStringKey("Toutes") : LocalizedStringKey("\(value)+ ⭐"))
                                         .font(.system(.caption, design: .rounded, weight: .bold))
                                         .padding(.horizontal, 12)
                                         .padding(.vertical, 8)
@@ -81,7 +81,7 @@ struct CineTableFilterView: View {
                                 Button {
                                     filters.minTMDBRating = value
                                 } label: {
-                                    Text(value == 0 ? "Toutes" : "\(Int(value))+")
+                                    Text(value == 0 ? LocalizedStringKey("Toutes") : LocalizedStringKey("\(Int(value))+"))
                                         .font(.system(.caption, design: .rounded, weight: .bold))
                                         .padding(.horizontal, 12)
                                         .padding(.vertical, 8)
@@ -121,7 +121,7 @@ struct CineTableFilterView: View {
     private func optionRow(label: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack {
-                Text(label)
+                Text(LocalizedStringKey(label))
                     .font(.system(.body, design: .rounded, weight: .bold))
                     .foregroundColor(.mooDark)
                 Spacer()

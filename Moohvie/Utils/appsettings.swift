@@ -23,6 +23,12 @@ class AppSettings: ObservableObject {
         }
     }
 
+    @Published var appLanguage: AppLanguage {
+        didSet {
+            UserDefaults.standard.set(appLanguage.rawValue, forKey: "appLanguage")
+        }
+    }
+
     private init() {
         let savedIDs = UserDefaults.standard.array(forKey: "selectedProviderIDs") as? [Int] ?? []
         self.selectedProviderIDs = Set(savedIDs)
@@ -31,6 +37,9 @@ class AppSettings: ObservableObject {
         self.maxCertification = FrenchCertification(rawValue: savedCert) ?? .all
 
         self.allowRewatching = UserDefaults.standard.bool(forKey: "allowRewatching")
+
+        let savedLanguage = UserDefaults.standard.string(forKey: "appLanguage") ?? AppLanguage.system.rawValue
+        self.appLanguage = AppLanguage(rawValue: savedLanguage) ?? .system
     }
 }
 

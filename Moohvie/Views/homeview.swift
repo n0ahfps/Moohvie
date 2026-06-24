@@ -112,10 +112,10 @@ struct HomeView: View {
 
     private func modeButtonLabel(title: String, subtitle: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(.system(.headline, design: .rounded, weight: .bold))
                 .foregroundColor(.mooDark)
-            Text(subtitle)
+            Text(LocalizedStringKey(subtitle))
                 .font(.system(.subheadline, design: .rounded))
                 .foregroundColor(.mooTaupe)
         }

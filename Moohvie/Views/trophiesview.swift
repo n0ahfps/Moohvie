@@ -42,14 +42,14 @@ struct TrophiesView: View {
                 .background((trophy.isUnlocked ? trophy.tier!.color : .mooBeige).opacity(0.15))
                 .clipShape(Circle())
 
-            Text(trophy.title)
+            Text(LocalizedStringKey(trophy.title))
                 .font(.system(.caption, design: .rounded, weight: .bold))
                 .foregroundColor(.mooDark)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
 
             if let tier = trophy.tier {
-                Text(tier.label)
+                Text(LocalizedStringKey(tier.label))
                     .font(.caption2)
                     .fontWeight(.bold)
                     .foregroundColor(tier.color)
