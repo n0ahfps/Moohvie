@@ -64,15 +64,28 @@ struct HomeView: View {
                     }
                     .padding(.horizontal)
 
-                    NavigationLink {
-                        CineTableView()
-                    } label: {
-                        HStack {
-                            Image(systemName: "square.grid.2x2.fill")
-                            Text("Mon Cinétable")
+                    VStack(spacing: 10) {
+                        NavigationLink {
+                            CineTableView()
+                        } label: {
+                            HStack {
+                                Image(systemName: "square.grid.2x2.fill")
+                                Text("Mon Cinétable")
+                            }
+                            .font(.system(.subheadline, design: .rounded, weight: .bold))
+                            .foregroundColor(.mooOrange)
                         }
-                        .font(.system(.subheadline, design: .rounded, weight: .bold))
-                        .foregroundColor(.mooOrange)
+
+                        NavigationLink {
+                            TrophiesView()
+                        } label: {
+                            HStack {
+                                Image(systemName: "trophy.fill")
+                                Text("Mes trophées")
+                            }
+                            .font(.system(.subheadline, design: .rounded, weight: .bold))
+                            .foregroundColor(.mooOrange)
+                        }
                     }
                     .padding(.top, 8)
 
