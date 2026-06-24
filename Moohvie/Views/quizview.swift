@@ -23,7 +23,7 @@ struct QuizView: View {
                     SwipeView(quizViewModel: viewModel)
                 } else if !viewModel.questions.isEmpty {
                     VStack(spacing: 24) {
-                        Text(viewModel.currentQuestion.text)
+                        Text(LocalizedStringKey(viewModel.currentQuestion.text))
                             .font(.system(.title2, design: .rounded, weight: .bold))
                             .foregroundColor(.mooDark)
                             .multilineTextAlignment(.center)
@@ -36,7 +36,7 @@ struct QuizView: View {
                                         viewModel.selectAnswer(option)
                                     }
                                 } label: {
-                                    Text(option.label)
+                                    Text(LocalizedStringKey(option.label))
                                         .font(.system(.headline, design: .rounded, weight: .bold))
                                         .foregroundColor(.mooDark)
                                         .frame(maxWidth: .infinity)

@@ -17,7 +17,7 @@ struct TrophyDetailView: View {
                             .background((trophy.isUnlocked ? trophy.tier!.color : .mooBeige).opacity(0.15))
                             .clipShape(Circle())
 
-                        Text(trophy.title)
+                        Text(LocalizedStringKey(trophy.title))
                             .font(.system(.title3, design: .rounded, weight: .bold))
                             .foregroundColor(.mooDark)
 
@@ -34,7 +34,7 @@ struct TrophyDetailView: View {
                     }
                     .padding(.horizontal)
 
-                    Text(trophy.description)
+                    Text(LocalizedStringKey(trophy.description))
                         .font(.system(.footnote, design: .rounded))
                         .foregroundColor(.mooTaupe)
                         .multilineTextAlignment(.center)
@@ -43,7 +43,7 @@ struct TrophyDetailView: View {
                 .padding(.bottom, 24)
             }
         }
-        .navigationTitle(trophy.title)
+        .navigationTitle(LocalizedStringKey(trophy.title))
         .navigationBarTitleDisplayMode(.inline)
     }
 
@@ -54,7 +54,7 @@ struct TrophyDetailView: View {
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(milestone.tier.label)
+                Text(LocalizedStringKey(milestone.tier.label))
                     .font(.system(.subheadline, design: .rounded, weight: .bold))
                     .foregroundColor(.mooDark)
 

@@ -241,7 +241,7 @@ struct CineTableView: View {
                     .foregroundColor(.mooDark)
                     .lineLimit(1)
 
-                Text(movie.primaryGenreName)
+                Text(LocalizedStringKey(movie.primaryGenreName))
                     .font(.caption2)
                     .foregroundColor(.mooTaupe)
 
