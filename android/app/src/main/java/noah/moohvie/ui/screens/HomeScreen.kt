@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -48,6 +49,7 @@ fun HomeScreen(
     onOpenShop: () -> Unit,
     onOpenProfile: () -> Unit,
     onOpenTrophies: () -> Unit,
+    onOpenSettings: () -> Unit,
 ) {
     val context = LocalContext.current
     val pointsStore = remember { MoohPointsStore.getInstance(context) }
@@ -60,6 +62,11 @@ fun HomeScreen(
                 navigationIcon = {
                     IconButton(onClick = onOpenShop) {
                         Icon(Icons.Filled.Storefront, contentDescription = "Boutique", tint = MooOrangeDefault)
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onOpenSettings) {
+                        Icon(Icons.Filled.Settings, contentDescription = "Réglages", tint = MooOrangeDefault)
                     }
                 },
             )

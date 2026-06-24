@@ -14,6 +14,7 @@ import noah.moohvie.ui.screens.CineTableScreen
 import noah.moohvie.ui.screens.HomeScreen
 import noah.moohvie.ui.screens.ProfileScreen
 import noah.moohvie.ui.screens.QuizScreen
+import noah.moohvie.ui.screens.SettingsScreen
 import noah.moohvie.ui.screens.ShopScreen
 import noah.moohvie.ui.screens.SurpriseScreen
 import noah.moohvie.ui.screens.TrophiesScreen
@@ -42,6 +43,7 @@ private object Routes {
     const val PROFILE = "profile"
     const val TROPHIES = "trophies"
     const val TROPHY_DETAIL = "trophies/{trophyId}"
+    const val SETTINGS = "settings"
 
     fun quiz(quizLength: QuizLength) = "quiz/${quizLength.name}"
     fun trophyDetail(trophyId: String) = "trophies/$trophyId"
@@ -61,6 +63,7 @@ private fun MoohvieNavHost() {
                 onOpenShop = { navController.navigate(Routes.SHOP) },
                 onOpenProfile = { navController.navigate(Routes.PROFILE) },
                 onOpenTrophies = { navController.navigate(Routes.TROPHIES) },
+                onOpenSettings = { navController.navigate(Routes.SETTINGS) },
             )
         }
         composable(Routes.QUIZ) { backStackEntry ->
@@ -90,6 +93,9 @@ private fun MoohvieNavHost() {
         composable(Routes.TROPHY_DETAIL) { backStackEntry ->
             val trophyId = backStackEntry.arguments?.getString("trophyId") ?: return@composable
             TrophyDetailScreen(trophyId = trophyId, onBack = { navController.popBackStack() })
+        }
+        composable(Routes.SETTINGS) {
+            SettingsScreen(onClose = { navController.popBackStack() })
         }
     }
 }
