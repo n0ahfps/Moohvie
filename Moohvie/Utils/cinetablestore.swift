@@ -64,4 +64,22 @@ class CineTableStore: ObservableObject {
         guard let index = watchedMovies.firstIndex(where: { $0.id == movieID }) else { return }
         watchedMovies[index].personalRating = rating
     }
+
+    // Returns a normalized weight [0, 1] per genre from highly-rated movies.
+    // Requires at least 3 qualifying films to avoid biasing on too little data.
+    func favoriteGenreWeights(minRating: Int = 4) -> [Int: Double] {
+        let qualified = watchedMovies.filter { $0.personalRating >= minRating }
+        guard qualified.count >= 3 else { return [:] }
+
+        var rawScores: [Int: Double] = [:]
+        for movie in qualified {
+            let weight = Double(movie.personalRating) / 5.0
+            for genreID in movie.genreIDs {
+                rawScores[genreID, default: 0] += weight
+            }
+        }
+
+        guard let maxScore = rawScores.values.max(), maxScore > 0 else { return [:] }
+        return rawScores.mapValues { $0 / maxScore }
+    }
 }

@@ -65,6 +65,24 @@ class CineTableStore private constructor(context: Context) {
         save()
     }
 
+    // Returns a normalized weight [0, 1] per genre from highly-rated movies.
+    // Requires at least 3 qualifying films to avoid biasing on too little data.
+    fun favoriteGenreWeights(minRating: Int = 4): Map<Int, Double> {
+        val qualified = watchedMovies.filter { it.personalRating >= minRating }
+        if (qualified.size < 3) return emptyMap()
+
+        val rawScores = mutableMapOf<Int, Double>()
+        for (movie in qualified) {
+            val weight = movie.personalRating / 5.0
+            for (genreID in movie.genreIDs) {
+                rawScores[genreID] = (rawScores[genreID] ?: 0.0) + weight
+            }
+        }
+
+        val maxScore = rawScores.values.maxOrNull() ?: return emptyMap()
+        return rawScores.mapValues { it.value / maxScore }
+    }
+
     companion object {
         @Volatile private var instance: CineTableStore? = null
 

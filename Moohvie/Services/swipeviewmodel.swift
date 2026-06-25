@@ -100,14 +100,20 @@ class SwipeViewModel: ObservableObject {
     private func sortedByRelevance(_ movies: [Movie], wantedGenres: [Int]) -> [Movie] {
         let wanted = Set(wantedGenres)
         let skipWeights = SkipHistoryStore.shared.skippedGenreWeights
-        guard !wanted.isEmpty || !skipWeights.isEmpty else { return movies.shuffled() }
-        return movies.sorted { relevanceScore($0, wanted: wanted, skipWeights: skipWeights) > relevanceScore($1, wanted: wanted, skipWeights: skipWeights) }
+        let cinetableWeights = CineTableStore.shared.favoriteGenreWeights()
+        guard !wanted.isEmpty || !skipWeights.isEmpty || !cinetableWeights.isEmpty else { return movies.shuffled() }
+        return movies.sorted {
+            relevanceScore($0, wanted: wanted, skipWeights: skipWeights, cinetableWeights: cinetableWeights) >
+            relevanceScore($1, wanted: wanted, skipWeights: skipWeights, cinetableWeights: cinetableWeights)
+        }
     }
 
-    private func relevanceScore(_ movie: Movie, wanted: Set<Int>, skipWeights: [Int: Double]) -> Double {
+    private func relevanceScore(_ movie: Movie, wanted: Set<Int>, skipWeights: [Int: Double], cinetableWeights: [Int: Double]) -> Double {
         let match = Double(movie.genreIDs.filter { wanted.contains($0) }.count)
+        // 0.5 factor keeps quiz signal dominant over history
+        let bonus = movie.genreIDs.reduce(0.0) { $0 + (cinetableWeights[$1] ?? 0) * 0.5 }
         let penalty = movie.genreIDs.reduce(0.0) { $0 + (skipWeights[$1] ?? 0) }
-        return match - penalty
+        return match + bonus - penalty
     }
 
     var currentMovie: Movie? {
