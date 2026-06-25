@@ -11,11 +11,13 @@ import noah.moohvie.models.CountryProviders
 import noah.moohvie.models.Movie
 import noah.moohvie.services.AppSettings
 import noah.moohvie.services.CineTableStore
+import noah.moohvie.services.SkipHistoryStore
 import noah.moohvie.services.TMDBService
 
 class SwipeViewModel(application: Application) : AndroidViewModel(application) {
     private val settings = AppSettings.getInstance(application)
     private val cineTableStore = CineTableStore.getInstance(application)
+    private val skipHistoryStore = SkipHistoryStore.getInstance(application)
     private val service = TMDBService(settings)
 
     var movies: List<Movie> by mutableStateOf(emptyList())
@@ -119,9 +121,16 @@ class SwipeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun sortedByRelevance(movies: List<Movie>, wantedGenres: List<Int>): List<Movie> {
-        if (wantedGenres.isEmpty()) return movies.shuffled()
         val wanted = wantedGenres.toSet()
-        return movies.sortedByDescending { movie -> movie.genreIDs.count { it in wanted } }
+        val skipWeights = skipHistoryStore.skippedGenreWeights
+        if (wanted.isEmpty() && skipWeights.isEmpty()) return movies.shuffled()
+        return movies.sortedByDescending { movie -> relevanceScore(movie, wanted, skipWeights) }
+    }
+
+    private fun relevanceScore(movie: Movie, wanted: Set<Int>, skipWeights: Map<Int, Double>): Double {
+        val match = movie.genreIDs.count { it in wanted }.toDouble()
+        val penalty = movie.genreIDs.sumOf { skipWeights[it] ?: 0.0 }
+        return match - penalty
     }
 
     val currentMovie: Movie?
@@ -150,6 +159,7 @@ class SwipeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun skip() {
+        currentMovie?.let { skipHistoryStore.record(it) }
         currentIndex += 1
     }
 
