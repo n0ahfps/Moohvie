@@ -67,6 +67,9 @@ class QuizViewModel : ViewModel() {
     val finalGenres: List<Int>
         get() = (selectedGenres - excludedGenres).toList()
 
+    val finalExcludedGenres: List<Int>
+        get() = (excludedGenres - selectedGenres).toList()
+
     fun reset() {
         currentQuestionIndex = 0
         selectedGenres = emptySet()

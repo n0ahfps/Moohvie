@@ -50,6 +50,16 @@ struct SwipeView: View {
                 .font(.system(.subheadline, design: .rounded, weight: .bold))
                 .foregroundColor(.mooDark)
 
+            if swipeViewModel.criteriaRelaxed {
+                Text("Critères élargis — aucun résultat exact trouvé")
+                    .font(.system(.caption, design: .rounded))
+                    .foregroundColor(.mooCoral)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.mooCoral.opacity(0.1))
+                    .cornerRadius(8)
+            }
+
             if let movie = swipeViewModel.currentMovie {
                 SwipeCardView(movie: movie, posterHeight: 280)
                     .offset(dragOffset)
