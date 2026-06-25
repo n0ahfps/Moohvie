@@ -3,6 +3,7 @@ import SwiftUI
 struct SwipeView: View {
     var quizViewModel: QuizViewModel?
     @StateObject private var swipeViewModel = SwipeViewModel()
+    @ObservedObject private var shop = ShopStore.shared
     @State private var dragOffset: CGSize = .zero
 
     var body: some View {

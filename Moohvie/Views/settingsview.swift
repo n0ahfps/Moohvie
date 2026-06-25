@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var settings = AppSettings.shared
+    @ObservedObject private var shop = ShopStore.shared
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CineTableView: View {
     @ObservedObject var store = CineTableStore.shared
+    @ObservedObject private var shop = ShopStore.shared
     @State private var movieToDelete: WatchedMovie?
     @State private var showSearch = false
     @State private var showFilters = false

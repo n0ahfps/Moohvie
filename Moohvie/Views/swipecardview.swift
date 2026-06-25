@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SwipeCardView: View {
+    @ObservedObject private var shop = ShopStore.shared
     let movie: Movie
     var posterHeight: CGFloat = 420
 
