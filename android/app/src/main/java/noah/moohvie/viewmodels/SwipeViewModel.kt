@@ -123,14 +123,17 @@ class SwipeViewModel(application: Application) : AndroidViewModel(application) {
     private fun sortedByRelevance(movies: List<Movie>, wantedGenres: List<Int>): List<Movie> {
         val wanted = wantedGenres.toSet()
         val skipWeights = skipHistoryStore.skippedGenreWeights
-        if (wanted.isEmpty() && skipWeights.isEmpty()) return movies.shuffled()
-        return movies.sortedByDescending { movie -> relevanceScore(movie, wanted, skipWeights) }
+        val cinetableWeights = cineTableStore.favoriteGenreWeights()
+        if (wanted.isEmpty() && skipWeights.isEmpty() && cinetableWeights.isEmpty()) return movies.shuffled()
+        return movies.sortedByDescending { movie -> relevanceScore(movie, wanted, skipWeights, cinetableWeights) }
     }
 
-    private fun relevanceScore(movie: Movie, wanted: Set<Int>, skipWeights: Map<Int, Double>): Double {
+    private fun relevanceScore(movie: Movie, wanted: Set<Int>, skipWeights: Map<Int, Double>, cinetableWeights: Map<Int, Double>): Double {
         val match = movie.genreIDs.count { it in wanted }.toDouble()
+        // 0.5 factor keeps quiz signal dominant over history
+        val bonus = movie.genreIDs.sumOf { (cinetableWeights[it] ?: 0.0) * 0.5 }
         val penalty = movie.genreIDs.sumOf { skipWeights[it] ?: 0.0 }
-        return match - penalty
+        return match + bonus - penalty
     }
 
     val currentMovie: Movie?
