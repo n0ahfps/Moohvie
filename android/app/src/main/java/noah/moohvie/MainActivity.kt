@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import noah.moohvie.models.QuizLength
 import noah.moohvie.ui.screens.CineTableScreen
+import noah.moohvie.ui.screens.StatsScreen
 import noah.moohvie.ui.screens.HomeScreen
 import noah.moohvie.ui.screens.MoodSwipeScreen
 import noah.moohvie.ui.screens.ProfileScreen
@@ -43,6 +44,7 @@ private object Routes {
     const val SURPRISE = "surprise"
     const val MOOD = "mood/{presetId}"
     const val CINETABLE = "cinetable"
+    const val STATS = "cinetable/stats"
     const val SHOP = "shop"
     const val PROFILE = "profile"
     const val TROPHIES = "trophies"
@@ -109,7 +111,10 @@ private fun MoohvieNavHost() {
             MoodSwipeScreen(presetId = presetId, onBack = { back() })
         }
         composable(Routes.CINETABLE) {
-            CineTableScreen(onBack = { back() })
+            CineTableScreen(onBack = { back() }, onOpenStats = { navigate(Routes.STATS) })
+        }
+        composable(Routes.STATS) {
+            StatsScreen(onBack = { back() })
         }
         composable(Routes.SHOP) {
             ShopScreen(onBack = { back() })

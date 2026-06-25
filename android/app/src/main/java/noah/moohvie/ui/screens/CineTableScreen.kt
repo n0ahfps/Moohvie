@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.GridView
@@ -66,6 +67,7 @@ private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 @Composable
 fun CineTableScreen(
     onBack: () -> Unit,
+    onOpenStats: () -> Unit = {},
     viewModel: CineTableViewModel = viewModel(),
 ) {
     var showSearch by remember { mutableStateOf(false) }
@@ -83,6 +85,9 @@ fun CineTableScreen(
                 },
                 actions = {
                     if (viewModel.store.watchedMovies.isNotEmpty()) {
+                        IconButton(onClick = onOpenStats) {
+                            Icon(Icons.Filled.BarChart, contentDescription = tr("Statistiques"), tint = LocalAccentColor.current)
+                        }
                         IconButton(onClick = { showSearch = true }) {
                             Icon(Icons.Filled.Add, contentDescription = tr("Ajouter un film"), tint = LocalAccentColor.current)
                         }
