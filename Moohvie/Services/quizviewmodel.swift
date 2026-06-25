@@ -74,6 +74,11 @@ class QuizViewModel: ObservableObject {
         Array(excludedGenres.subtracting(selectedGenres))
     }
 
+    func applyMood(_ preset: MoodPreset) {
+        selectedGenres = Set(preset.genreIDs)
+        excludedGenres = []
+    }
+
     func reset() {
         currentQuestionIndex = 0
         selectedGenres = []

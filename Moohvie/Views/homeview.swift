@@ -51,6 +51,33 @@ struct HomeView: View {
 
                     Spacer()
 
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Envie rapide ?")
+                            .font(.system(.footnote, design: .rounded, weight: .bold))
+                            .foregroundColor(.mooTaupe)
+                            .padding(.horizontal, 4)
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 10) {
+                                ForEach(MoodPreset.all) { preset in
+                                    NavigationLink {
+                                        MoodSwipeView(preset: preset)
+                                    } label: {
+                                        Text("\(preset.emoji) \(preset.label)")
+                                            .font(.system(.subheadline, design: .rounded, weight: .bold))
+                                            .foregroundColor(.mooDark)
+                                            .padding(.horizontal, 14)
+                                            .padding(.vertical, 8)
+                                            .background(Color.white)
+                                            .clipShape(Capsule())
+                                            .overlay(Capsule().stroke(Color.mooBeige, lineWidth: 1.5))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+
                     VStack(spacing: 14) {
                         NavigationLink {
                             QuizView(quizLength: .short)
