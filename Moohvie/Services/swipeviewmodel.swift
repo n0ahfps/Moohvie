@@ -98,13 +98,16 @@ class SwipeViewModel: ObservableObject {
     }
 
     private func sortedByRelevance(_ movies: [Movie], wantedGenres: [Int]) -> [Movie] {
-        guard !wantedGenres.isEmpty else { return movies.shuffled() }
         let wanted = Set(wantedGenres)
-        return movies.sorted {
-            let scoreA = $0.genreIDs.filter { wanted.contains($0) }.count
-            let scoreB = $1.genreIDs.filter { wanted.contains($0) }.count
-            return scoreA > scoreB
-        }
+        let skipWeights = SkipHistoryStore.shared.skippedGenreWeights
+        guard !wanted.isEmpty || !skipWeights.isEmpty else { return movies.shuffled() }
+        return movies.sorted { relevanceScore($0, wanted: wanted, skipWeights: skipWeights) > relevanceScore($1, wanted: wanted, skipWeights: skipWeights) }
+    }
+
+    private func relevanceScore(_ movie: Movie, wanted: Set<Int>, skipWeights: [Int: Double]) -> Double {
+        let match = Double(movie.genreIDs.filter { wanted.contains($0) }.count)
+        let penalty = movie.genreIDs.reduce(0.0) { $0 + (skipWeights[$1] ?? 0) }
+        return match - penalty
     }
 
     var currentMovie: Movie? {
@@ -133,6 +136,9 @@ class SwipeViewModel: ObservableObject {
     }
 
     func skip() {
+        if let movie = currentMovie {
+            SkipHistoryStore.shared.record(movie)
+        }
         currentIndex += 1
     }
 
