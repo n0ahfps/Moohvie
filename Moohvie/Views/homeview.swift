@@ -4,6 +4,7 @@ struct HomeView: View {
     @State private var showSettings = false
     @ObservedObject private var pointsStore = MoohPointsStore.shared
     @ObservedObject private var profile = ProfileStore.shared
+    @ObservedObject private var shop = ShopStore.shared
 
     var body: some View {
         NavigationStack {

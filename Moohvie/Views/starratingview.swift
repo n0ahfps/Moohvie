@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct StarRatingView: View {
+    @ObservedObject private var shop = ShopStore.shared
     let rating: Int
     var onRate: (Int) -> Void
 

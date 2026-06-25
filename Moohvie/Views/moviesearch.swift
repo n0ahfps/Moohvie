@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct MovieSearchView: View {
+    @ObservedObject private var shop = ShopStore.shared
     @Environment(\.dismiss) private var dismiss
     @State private var query = ""
     @State private var results: [Movie] = []

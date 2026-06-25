@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CineTableFilterView: View {
     @Binding var filters: CineTableFilterState
+    @ObservedObject private var shop = ShopStore.shared
     @Environment(\.dismiss) private var dismiss
 
     private var availableGenres: [Int] {

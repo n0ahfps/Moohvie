@@ -2,6 +2,7 @@ import SwiftUI
 
 struct QuizView: View {
     @StateObject private var viewModel = QuizViewModel()
+    @ObservedObject private var shop = ShopStore.shared
     @Environment(\.dismiss) private var dismiss
     let quizLength: QuizLength
 
