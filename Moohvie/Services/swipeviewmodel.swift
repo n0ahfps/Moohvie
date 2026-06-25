@@ -11,12 +11,14 @@ class SwipeViewModel: ObservableObject {
     @Published var matchedMovie: Movie?
     @Published var matchedMovieProviders: CountryProviders?
     @Published var addedToCineTable = false
+    @Published var criteriaRelaxed = false
 
     private let service = TMDBService()
 
     func loadMovies(from quiz: QuizViewModel?) async {
         isLoading = true
         errorMessage = nil
+        criteriaRelaxed = false
 
         let settings = AppSettings.shared
         let providerIDs = Array(settings.selectedProviderIDs)
@@ -24,51 +26,57 @@ class SwipeViewModel: ObservableObject {
         let watchedIDs = CineTableStore.shared.watchedIDs
 
         let genreIDs = quiz?.finalGenres ?? []
+        let excludedGenreIDs = quiz?.finalExcludedGenres ?? []
         let maxRuntime = quiz?.maxRuntime
         let minVoteAverage = quiz?.minVoteAverage
         let minReleaseYear = quiz?.minReleaseYear
         let maxReleaseYear = quiz?.maxReleaseYear
 
-        // Page aléatoire parmi les 15 premières (au-delà, TMDB renvoie des films
-        // trop obscurs ou peu pertinents pour des critères précis)
-        let randomPage = Int.random(in: 1...15)
+        // Pages 1-5 pour les requêtes précises : au-delà, TMDB trie par popularité
+        // décroissante et les résultats perdent en pertinence par rapport aux genres.
+        let strictPage = Int.random(in: 1...5)
 
         do {
             var results = try await service.discoverMovies(
                 genreIDs: genreIDs,
+                genresToExclude: excludedGenreIDs,
                 maxRuntime: maxRuntime,
                 minVoteAverage: minVoteAverage,
                 minReleaseYear: minReleaseYear,
                 maxReleaseYear: maxReleaseYear,
                 providerIDs: providerIDs,
                 maxCertification: certification,
-                page: randomPage
+                page: strictPage
             )
 
             if results.isEmpty {
+                criteriaRelaxed = true
                 results = try await service.discoverMovies(
                     genreIDs: genreIDs,
+                    genresToExclude: excludedGenreIDs,
                     providerIDs: providerIDs,
                     maxCertification: certification,
-                    page: randomPage
+                    page: strictPage
                 )
             }
 
             if results.isEmpty, let firstGenre = genreIDs.first {
                 results = try await service.discoverMovies(
                     genreIDs: [firstGenre],
+                    genresToExclude: excludedGenreIDs,
                     providerIDs: providerIDs,
                     maxCertification: certification,
-                    page: randomPage
+                    page: strictPage
                 )
             }
 
             if results.isEmpty {
                 results = try await service.discoverMovies(
                     genreIDs: [],
+                    genresToExclude: excludedGenreIDs,
                     providerIDs: providerIDs,
                     maxCertification: certification,
-                    page: Int.random(in: 1...10)
+                    page: Int.random(in: 1...8)
                 )
             }
 
@@ -81,12 +89,22 @@ class SwipeViewModel: ObservableObject {
                 results = filtered.isEmpty ? results : filtered
             }
 
-            movies = results.shuffled()
+            movies = sortedByRelevance(results, wantedGenres: genreIDs)
         } catch {
             errorMessage = "Impossible de charger les films. Vérifie ta connexion."
         }
 
         isLoading = false
+    }
+
+    private func sortedByRelevance(_ movies: [Movie], wantedGenres: [Int]) -> [Movie] {
+        guard !wantedGenres.isEmpty else { return movies.shuffled() }
+        let wanted = Set(wantedGenres)
+        return movies.sorted {
+            let scoreA = $0.genreIDs.filter { wanted.contains($0) }.count
+            let scoreB = $1.genreIDs.filter { wanted.contains($0) }.count
+            return scoreA > scoreB
+        }
     }
 
     var currentMovie: Movie? {

@@ -6,7 +6,7 @@ struct QuestionBank {
             text: "As-tu envie de rigoler ?",
             options: [
                 AnswerOption(label: "Oui, j'ai besoin de rire", genresToAdd: [35]),
-                AnswerOption(label: "Non, plutôt sérieux"),
+                AnswerOption(label: "Non, plutôt sérieux", genresToExclude: [35]),
                 AnswerOption(label: "Peu importe")
             ],
             priority: .essential
@@ -33,7 +33,7 @@ struct QuestionBank {
             text: "T'as envie de sensations fortes ?",
             options: [
                 AnswerOption(label: "Oui, action/aventure", genresToAdd: [28, 12]),
-                AnswerOption(label: "Non, plutôt calme"),
+                AnswerOption(label: "Non, plutôt calme", genresToExclude: [28, 12]),
                 AnswerOption(label: "Peu importe")
             ],
             priority: .essential
@@ -42,7 +42,7 @@ struct QuestionBank {
             text: "Tu veux frissonner un peu ?",
             options: [
                 AnswerOption(label: "Oui, horreur/thriller", genresToAdd: [27, 53]),
-                AnswerOption(label: "Non merci"),
+                AnswerOption(label: "Non merci", genresToExclude: [27, 53]),
                 AnswerOption(label: "Peu importe")
             ],
             priority: .essential
@@ -51,7 +51,7 @@ struct QuestionBank {
             text: "Un peu de science-fiction ou fantastique ?",
             options: [
                 AnswerOption(label: "Oui, j'aime l'imaginaire", genresToAdd: [878, 14]),
-                AnswerOption(label: "Non, reste réaliste"),
+                AnswerOption(label: "Non, reste réaliste", genresToExclude: [878, 14]),
                 AnswerOption(label: "Peu importe")
             ],
             priority: .important

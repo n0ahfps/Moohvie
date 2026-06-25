@@ -16,6 +16,7 @@ class TMDBService {
 
     func discoverMovies(
         genreIDs: [Int],
+        genresToExclude: [Int] = [],
         maxRuntime: Int? = nil,
         minVoteAverage: Double? = nil,
         minReleaseYear: Int? = nil,
@@ -35,7 +36,11 @@ class TMDBService {
         ]
 
         if !genreIDs.isEmpty {
-            queryItems.append(URLQueryItem(name: "with_genres", value: genreIDs.map(String.init).joined(separator: ",")))
+            // "|" = OR : on élargit la requête, le tri par pertinence est fait côté app
+            queryItems.append(URLQueryItem(name: "with_genres", value: genreIDs.map(String.init).joined(separator: "|")))
+        }
+        if !genresToExclude.isEmpty {
+            queryItems.append(URLQueryItem(name: "without_genres", value: genresToExclude.map(String.init).joined(separator: "|")))
         }
         if let maxRuntime {
             queryItems.append(URLQueryItem(name: "with_runtime.lte", value: String(maxRuntime)))

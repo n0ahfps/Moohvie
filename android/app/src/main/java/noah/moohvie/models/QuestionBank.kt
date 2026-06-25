@@ -6,7 +6,7 @@ object QuestionBank {
             text = "As-tu envie de rigoler ?",
             options = listOf(
                 AnswerOption(label = "Oui, j'ai besoin de rire", genresToAdd = listOf(35)),
-                AnswerOption(label = "Non, plutôt sérieux"),
+                AnswerOption(label = "Non, plutôt sérieux", genresToExclude = listOf(35)),
                 AnswerOption(label = "Peu importe"),
             ),
             priority = QuestionPriority.ESSENTIAL,
@@ -33,7 +33,7 @@ object QuestionBank {
             text = "T'as envie de sensations fortes ?",
             options = listOf(
                 AnswerOption(label = "Oui, action/aventure", genresToAdd = listOf(28, 12)),
-                AnswerOption(label = "Non, plutôt calme"),
+                AnswerOption(label = "Non, plutôt calme", genresToExclude = listOf(28, 12)),
                 AnswerOption(label = "Peu importe"),
             ),
             priority = QuestionPriority.ESSENTIAL,
@@ -42,7 +42,7 @@ object QuestionBank {
             text = "Tu veux frissonner un peu ?",
             options = listOf(
                 AnswerOption(label = "Oui, horreur/thriller", genresToAdd = listOf(27, 53)),
-                AnswerOption(label = "Non merci"),
+                AnswerOption(label = "Non merci", genresToExclude = listOf(27, 53)),
                 AnswerOption(label = "Peu importe"),
             ),
             priority = QuestionPriority.ESSENTIAL,
@@ -51,7 +51,7 @@ object QuestionBank {
             text = "Un peu de science-fiction ou fantastique ?",
             options = listOf(
                 AnswerOption(label = "Oui, j'aime l'imaginaire", genresToAdd = listOf(878, 14)),
-                AnswerOption(label = "Non, reste réaliste"),
+                AnswerOption(label = "Non, reste réaliste", genresToExclude = listOf(878, 14)),
                 AnswerOption(label = "Peu importe"),
             ),
             priority = QuestionPriority.IMPORTANT,

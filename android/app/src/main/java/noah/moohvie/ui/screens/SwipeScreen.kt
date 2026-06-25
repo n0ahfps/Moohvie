@@ -103,6 +103,17 @@ private fun SwipeContent(viewModel: SwipeViewModel) {
         color = MooDark,
     )
 
+    if (viewModel.criteriaRelaxed) {
+        Text(
+            tr("Critères élargis — aucun résultat exact trouvé"),
+            style = MaterialTheme.typography.labelSmall,
+            color = MooCoral,
+            modifier = Modifier
+                .background(MooCoral.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
+                .padding(horizontal = 12.dp, vertical = 6.dp),
+        )
+    }
+
     val movie = viewModel.currentMovie ?: return
 
     Box(

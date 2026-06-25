@@ -33,61 +33,70 @@ class SwipeViewModel(application: Application) : AndroidViewModel(application) {
         private set
     var addedToCineTable: Boolean by mutableStateOf(false)
         private set
+    var criteriaRelaxed: Boolean by mutableStateOf(false)
+        private set
 
     fun loadMovies(quiz: QuizViewModel?) {
         viewModelScope.launch {
             isLoading = true
             errorMessage = null
+            criteriaRelaxed = false
 
             val providerIDs = settings.selectedProviderIDs.toList()
             val certification = settings.maxCertification
             val watchedIDs = cineTableStore.watchedIDs
 
             val genreIDs = quiz?.finalGenres ?: emptyList()
+            val excludedGenreIDs = quiz?.finalExcludedGenres ?: emptyList()
             val maxRuntime = quiz?.maxRuntime
             val minVoteAverage = quiz?.minVoteAverage
             val minReleaseYear = quiz?.minReleaseYear
             val maxReleaseYear = quiz?.maxReleaseYear
 
-            // Page aléatoire parmi les 15 premières (au-delà, TMDB renvoie des films
-            // trop obscurs ou peu pertinents pour des critères précis)
-            val randomPage = (1..15).random()
+            // Pages 1-5 pour les requêtes précises : au-delà, TMDB trie par popularité
+            // décroissante et les résultats perdent en pertinence par rapport aux genres.
+            val strictPage = (1..5).random()
 
             try {
                 var results = service.discoverMovies(
                     genreIDs = genreIDs,
+                    genresToExclude = excludedGenreIDs,
                     maxRuntime = maxRuntime,
                     minVoteAverage = minVoteAverage,
                     minReleaseYear = minReleaseYear,
                     maxReleaseYear = maxReleaseYear,
                     providerIDs = providerIDs,
                     maxCertification = certification,
-                    page = randomPage,
+                    page = strictPage,
                 )
 
                 if (results.isEmpty()) {
+                    criteriaRelaxed = true
                     results = service.discoverMovies(
                         genreIDs = genreIDs,
+                        genresToExclude = excludedGenreIDs,
                         providerIDs = providerIDs,
                         maxCertification = certification,
-                        page = randomPage,
+                        page = strictPage,
                     )
                 }
 
                 if (results.isEmpty() && genreIDs.isNotEmpty()) {
                     results = service.discoverMovies(
                         genreIDs = listOf(genreIDs.first()),
+                        genresToExclude = excludedGenreIDs,
                         providerIDs = providerIDs,
                         maxCertification = certification,
-                        page = randomPage,
+                        page = strictPage,
                     )
                 }
 
                 if (results.isEmpty()) {
                     results = service.discoverMovies(
+                        genresToExclude = excludedGenreIDs,
                         providerIDs = providerIDs,
                         maxCertification = certification,
-                        page = (1..10).random(),
+                        page = (1..8).random(),
                     )
                 }
 
@@ -100,13 +109,19 @@ class SwipeViewModel(application: Application) : AndroidViewModel(application) {
                     results = filtered.ifEmpty { results }
                 }
 
-                movies = results.shuffled()
+                movies = sortedByRelevance(results, genreIDs)
             } catch (e: Exception) {
                 errorMessage = "Impossible de charger les films. Vérifie ta connexion."
             }
 
             isLoading = false
         }
+    }
+
+    private fun sortedByRelevance(movies: List<Movie>, wantedGenres: List<Int>): List<Movie> {
+        if (wantedGenres.isEmpty()) return movies.shuffled()
+        val wanted = wantedGenres.toSet()
+        return movies.sortedByDescending { movie -> movie.genreIDs.count { it in wanted } }
     }
 
     val currentMovie: Movie?

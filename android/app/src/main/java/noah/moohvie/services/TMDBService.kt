@@ -56,6 +56,7 @@ class TMDBService(private val appSettings: AppSettings) {
 
     suspend fun discoverMovies(
         genreIDs: List<Int> = emptyList(),
+        genresToExclude: List<Int> = emptyList(),
         maxRuntime: Int? = null,
         minVoteAverage: Double? = null,
         minReleaseYear: Int? = null,
@@ -72,7 +73,11 @@ class TMDBService(private val appSettings: AppSettings) {
             "vote_count.gte" to "100",
         )
         if (genreIDs.isNotEmpty()) {
-            params["with_genres"] = genreIDs.joinToString(",")
+            // "|" = OR : on élargit la requête, le tri par pertinence est fait côté app
+            params["with_genres"] = genreIDs.joinToString("|")
+        }
+        if (genresToExclude.isNotEmpty()) {
+            params["without_genres"] = genresToExclude.joinToString("|")
         }
         maxRuntime?.let { params["with_runtime.lte"] = it.toString() }
         minVoteAverage?.let { params["vote_average.gte"] = it.toString() }

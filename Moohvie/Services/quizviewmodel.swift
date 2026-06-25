@@ -70,6 +70,10 @@ class QuizViewModel: ObservableObject {
         Array(selectedGenres.subtracting(excludedGenres))
     }
 
+    var finalExcludedGenres: [Int] {
+        Array(excludedGenres.subtracting(selectedGenres))
+    }
+
     func reset() {
         currentQuestionIndex = 0
         selectedGenres = []
