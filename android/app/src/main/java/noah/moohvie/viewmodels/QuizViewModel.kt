@@ -70,6 +70,11 @@ class QuizViewModel : ViewModel() {
     val finalExcludedGenres: List<Int>
         get() = (excludedGenres - selectedGenres).toList()
 
+    fun applyMood(preset: noah.moohvie.models.MoodPreset) {
+        selectedGenres = preset.genreIDs.toSet()
+        excludedGenres = emptySet()
+    }
+
     fun reset() {
         currentQuestionIndex = 0
         selectedGenres = emptySet()

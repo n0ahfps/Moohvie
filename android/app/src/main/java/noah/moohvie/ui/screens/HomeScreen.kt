@@ -3,13 +3,16 @@
 package noah.moohvie.ui.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -17,6 +20,8 @@ import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Storefront
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -34,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import noah.moohvie.models.MoodPreset
 import noah.moohvie.models.QuizLength
 import noah.moohvie.services.MoohPointsStore
 import noah.moohvie.services.ProfileStore
@@ -46,6 +52,7 @@ import noah.moohvie.ui.theme.tr
 fun HomeScreen(
     onStartQuiz: (QuizLength) -> Unit,
     onSurpriseMe: () -> Unit,
+    onStartMood: (String) -> Unit,
     onOpenCineTable: () -> Unit,
     onOpenShop: () -> Unit,
     onOpenProfile: () -> Unit,
@@ -112,6 +119,33 @@ fun HomeScreen(
                 "🔶 ${pointsStore.totalPoints} ${tr("points")}",
                 color = LocalAccentColor.current,
             )
+
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    tr("Envie rapide ?"),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MooTaupe,
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.horizontalScroll(rememberScrollState()),
+                ) {
+                    MoodPreset.all.forEach { preset ->
+                        AssistChip(
+                            onClick = { onStartMood(preset.id) },
+                            label = { Text("${preset.emoji} ${tr(preset.label)}") },
+                            colors = AssistChipDefaults.assistChipColors(
+                                containerColor = androidx.compose.ui.graphics.Color.White,
+                                labelColor = MooDark,
+                            ),
+                        )
+                    }
+                }
+            }
 
             ModeButton(tr("Rapide"), tr("5 questions essentielles")) { onStartQuiz(QuizLength.SHORT) }
             ModeButton(tr("Équilibré"), tr("12 questions pour mieux cibler")) { onStartQuiz(QuizLength.MEDIUM) }
