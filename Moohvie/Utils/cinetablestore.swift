@@ -1,6 +1,14 @@
 import Foundation
 import Combine
 
+struct CineTableStats {
+    let totalMovies: Int
+    let favoriteGenreName: String?
+    let averagePersonalRating: Double?
+    let topRatedMovie: WatchedMovie?
+    let moviesPerMonth: Double?
+}
+
 @MainActor
 class CineTableStore: ObservableObject {
     static let shared = CineTableStore()
@@ -63,6 +71,35 @@ class CineTableStore: ObservableObject {
     func setRating(_ movieID: Int, rating: Int) {
         guard let index = watchedMovies.firstIndex(where: { $0.id == movieID }) else { return }
         watchedMovies[index].personalRating = rating
+    }
+
+    var stats: CineTableStats {
+        let movies = watchedMovies
+
+        var genreCounts: [Int: Int] = [:]
+        for m in movies { for g in m.genreIDs { genreCounts[g, default: 0] += 1 } }
+        let favoriteGenreName = genreCounts.max(by: { $0.value < $1.value }).map { GenreLookup.name(for: $0.key) }
+
+        let rated = movies.filter { $0.personalRating > 0 }
+        let avgRating: Double? = rated.isEmpty ? nil : Double(rated.reduce(0) { $0 + $1.personalRating }) / Double(rated.count)
+        let topMovie = rated.max(by: { $0.personalRating < $1.personalRating })
+
+        var moviesPerMonth: Double? = nil
+        if movies.count >= 2 {
+            let dates = movies.map { $0.watchedDate }
+            if let earliest = dates.min(), let latest = dates.max() {
+                let months = max(1, Calendar.current.dateComponents([.month], from: earliest, to: latest).month ?? 1)
+                moviesPerMonth = Double(movies.count) / Double(months)
+            }
+        }
+
+        return CineTableStats(
+            totalMovies: movies.count,
+            favoriteGenreName: favoriteGenreName,
+            averagePersonalRating: avgRating,
+            topRatedMovie: topMovie,
+            moviesPerMonth: moviesPerMonth
+        )
     }
 
     // Returns a normalized weight [0, 1] per genre from highly-rated movies.

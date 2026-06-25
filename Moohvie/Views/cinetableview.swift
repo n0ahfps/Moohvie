@@ -60,6 +60,14 @@ struct CineTableView: View {
         .toolbar {
             if !store.watchedMovies.isEmpty {
                 ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        StatsView()
+                    } label: {
+                        Image(systemName: "chart.bar.fill")
+                            .foregroundColor(.mooOrange)
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showSearch = true
                     } label: {
